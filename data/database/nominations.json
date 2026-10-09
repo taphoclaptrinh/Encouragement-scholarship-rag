@@ -9,5 +9,27 @@
     "reason": "Kiểm toán độc lập phê duyệt đủ chuẩn GPA 3.85 và ĐRL 94.",
     "created_at": "2026-10-09T16:58:01.246414",
     "verified_at": "2026-10-09T16:58:01.274789"
+  },
+  {
+    "nomination_id": "NOM_20261009_C55FC0",
+    "student_id": "SV2024001",
+    "student_name": "Nguyễn Văn An",
+    "faculty": "CNTT",
+    "scholarship_tier": "Xuất sắc",
+    "status": "VERIFIED",
+    "reason": "GPA 3.85 + ĐRL 94 đủ điều kiện",
+    "created_at": "2026-10-09T20:51:14.641602",
+    "verified_at": "2026-10-09T20:51:14.643769"
+  },
+  {
+    "nomination_id": "NOM_20261009_3453F8",
+    "student_id": "SV2024001",
+    "student_name": "Nguyễn Văn An",
+    "faculty": "CNTT",
+    "scholarship_tier": "Xuất sắc",
+    "status": "VERIFIED",
+    "reason": "Kiểm toán độc lập từ Client 2 xác nhận sinh viên đủ điều kiện GPA 3.85 và ĐRL 94.",
+    "created_at": "2026-10-09T20:52:26.312677",
+    "verified_at": "2026-10-09T20:52:26.314505"
   }
 ]
