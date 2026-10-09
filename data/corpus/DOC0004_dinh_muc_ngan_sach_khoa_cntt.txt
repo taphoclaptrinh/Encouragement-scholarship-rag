@@ -1,0 +1,25 @@
+---
+doc_id: DOC0004
+title: Hướng dẫn Phân bổ Quỹ Học bổng Khuyến khích Học tập - Khoa Công nghệ Thông tin
+date: 2024-02-15
+version: 1.1
+owner: Ban Chủ nhiệm Khoa CNTT
+status: ACTIVE_CURRENT
+faculty: CNTT
+---
+
+HƯỚNG DẪN THỰC HIỆN PHÂN BỔ HỌC BỔNG KHOA CÔNG NGHỆ THÔNG TIN
+
+1. Nguyên tắc phân bổ ngân sách:
+- Quỹ học bổng được phân bổ cho từng khóa/ngành dựa trên tỷ lệ ngân sách được cấp và sĩ số sinh viên.
+- Tổng số lượng học bổng cấp cho mỗi khóa không vượt quá 8% tổng sĩ số sinh viên của khóa đó.
+- Thứ tự ưu tiên xét cấp: Ưu tiên loại Xuất sắc, tiếp đến loại Giỏi, sau cùng mới đến loại Khá cho đến khi hết ngân sách.
+
+2. Tiêu chí phụ khi trùng điểm (Tie-breaking rule):
+Trường hợp ở ngưỡng điểm cuối cùng có nhiều sinh viên cùng mức xếp loại và cùng GPA:
+- Ưu tiên 1: Sinh viên có Điểm rèn luyện (ĐRL) cao hơn.
+- Ưu tiên 2: Sinh viên có thành tích Nghiên cứu khoa học hoặc giải thưởng Olympic tin học cấp trường trở lên.
+- Ưu tiên 3: Sinh viên tích lũy số tín chỉ trong kỳ nhiều hơn.
+
+3. Lưu ý đối với các chương trình liên kết hoặc học bổng doanh nghiệp:
+- Khoa CNTT không quản lý và không xét duyệt các quỹ học bổng tài trợ ngoài ngân sách (học bổng doanh nghiệp, học bổng cựu sinh viên, học bổng trao đổi quốc tế). Những học bổng này có quy trình nộp hồ sơ độc lập tại Văn phòng Hợp tác Doanh nghiệp.

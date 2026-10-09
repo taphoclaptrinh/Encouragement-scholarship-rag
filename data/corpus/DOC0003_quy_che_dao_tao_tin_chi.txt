@@ -1,0 +1,20 @@
+---
+doc_id: DOC0003
+title: Quy chế Đào tạo Trình độ Đại học theo Hệ thống Tín chỉ
+date: 2023-08-20
+version: 1.5
+owner: Phòng Đào tạo (PĐT)
+status: ACTIVE_CURRENT
+---
+
+QUY CHẾ ĐÀO TẠO ĐẠI HỌC THEO HỆ THỐNG TÍN CHỈ
+
+Điều 15. Tín chỉ học tập trong một học kỳ
+1. Khối lượng học tập tối thiểu sinh viên phải đăng ký trong mỗi học kỳ chính là 14 tín chỉ (đối với sinh viên có học lực bình thường) và 10 tín chỉ (đối với sinh viên học lực yếu hoặc bị cảnh cáo học vụ).
+2. Khối lượng học tập tối đa trong học kỳ chính là 24 tín chỉ.
+3. Học kỳ phụ (kỳ hè): Sinh viên được đăng ký tối đa 10 tín chỉ. Các tín chỉ trong kỳ hè KHÔNG được xét tính cho học bổng khuyến khích học tập học kỳ chính.
+
+Điều 22. Xử lý kỷ luật học vụ
+1. Sinh viên có điểm GPA học kỳ dưới 1.00 hoặc điểm GPA tích lũy dưới 1.20 sẽ bị Cảnh cáo học vụ mức 1.
+2. Sinh viên bị 3 lần Cảnh cáo học vụ liên tiếp sẽ bị Buộc thôi học.
+3. Sinh viên trong thời gian bị kỷ luật từ mức Phê bình toàn trường, Khiển trách hoặc Cảnh cáo học vụ đều không được tham gia bình bầu danh hiệu thi đua và không được xét bất kỳ loại học bổng nào trong kỳ đó.

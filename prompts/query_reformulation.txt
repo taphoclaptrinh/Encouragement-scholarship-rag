@@ -1,0 +1,10 @@
+Hãy phân tích câu hỏi sau để trích xuất metadata filter (nếu có) và từ khóa tìm kiếm:
+Câu hỏi: "{query}"
+
+Trả về định dạng JSON duy nhất:
+{
+  "search_query": "<từ khóa tìm kiếm>",
+  "filter_doc_id": "<DOCxxxx hoặc null>",
+  "filter_faculty": "<CNTT hoặc null>",
+  "filter_year": "<2023 hoặc 2024 hoặc null>"
+}

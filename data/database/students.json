@@ -1,0 +1,80 @@
+[
+  {
+    "student_id": "SV2024001",
+    "full_name": "Nguyễn Văn An",
+    "faculty": "CNTT",
+    "cohort": "K2021",
+    "semester": "HK1-2023-2024",
+    "gpa": 3.85,
+    "drl": 94,
+    "credits_registered": 18,
+    "has_failed_course": false,
+    "disciplinary_record": null,
+    "scientific_research_award": true
+  },
+  {
+    "student_id": "SV2024002",
+    "full_name": "Trần Thị Bình",
+    "faculty": "CNTT",
+    "cohort": "K2021",
+    "semester": "HK1-2023-2024",
+    "gpa": 3.72,
+    "drl": 84,
+    "credits_registered": 16,
+    "has_failed_course": false,
+    "disciplinary_record": null,
+    "scientific_research_award": false
+  },
+  {
+    "student_id": "SV2024003",
+    "full_name": "Lê Hoàng Cường",
+    "faculty": "CNTT",
+    "cohort": "K2022",
+    "semester": "HK1-2023-2024",
+    "gpa": 3.90,
+    "drl": 95,
+    "credits_registered": 13,
+    "has_failed_course": false,
+    "disciplinary_record": null,
+    "scientific_research_award": false
+  },
+  {
+    "student_id": "SV2024004",
+    "full_name": "Phạm Minh Đức",
+    "faculty": "CNTT",
+    "cohort": "K2022",
+    "semester": "HK1-2023-2024",
+    "gpa": 3.65,
+    "drl": 91,
+    "credits_registered": 16,
+    "has_failed_course": false,
+    "disciplinary_record": "Cảnh cáo học vụ mức 1",
+    "scientific_research_award": false
+  },
+  {
+    "student_id": "SV2024005",
+    "full_name": "Vũ Thu Dung",
+    "faculty": "CNTT",
+    "cohort": "K2023",
+    "semester": "HK1-2023-2024",
+    "gpa": 3.82,
+    "drl": null,
+    "credits_registered": 17,
+    "has_failed_course": false,
+    "disciplinary_record": null,
+    "scientific_research_award": false
+  },
+  {
+    "student_id": "SV2024006",
+    "full_name": "Đặng Quốc Hưng",
+    "faculty": "CNTT",
+    "cohort": "K2023",
+    "semester": "HK1-2023-2024",
+    "gpa": 3.05,
+    "drl": 76,
+    "credits_registered": 16,
+    "has_failed_course": false,
+    "disciplinary_record": null,
+    "scientific_research_award": false
+  }
+]

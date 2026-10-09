@@ -1,0 +1,33 @@
+---
+doc_id: DOC0001
+title: Quy chế Xét cấp Học bổng Khuyến khích học tập năm 2023
+date: 2023-09-15
+version: 1.0 (Hết hiệu lực từ 01/2024)
+owner: Phòng Công tác Sinh viên (CTSV)
+status: ARCHIVED_SUPERSEDED
+---
+
+QUY CHẾ XÉT CẤP HỌC BỔNG KHUYẾN KHÍCH HỌC TẬP (ÁP DỤNG NĂM HỌC 2022-2023)
+
+Điều 1. Tiêu chuẩn chung
+1. Sinh viên hệ chính quy đang trong thời gian đào tạo theo kế hoạch chuẩn.
+2. Số tín chỉ tích lũy trong học kỳ xét học bổng tối thiểu là 14 tín chỉ (không tính học phần Giáo dục thể chất và Giáo dục quốc phòng).
+3. Không bị kỷ luật từ mức Khiển trách trở lên trong học kỳ xét học bổng.
+
+Điều 2. Mức học bổng và tiêu chuẩn điểm số (Phiên bản 2023 cũ)
+1. Học bổng loại Xuất sắc:
+- Điểm trung bình chung học tập (GPA): Từ 3.60 trở lên (thang điểm 4).
+- Điểm rèn luyện (ĐRL): Từ 90 điểm trở lên (loại Xuất sắc).
+- Mức hỗ trợ: 120% mức học phí chuẩn.
+
+2. Học bổng loại Giỏi:
+- GPA: Từ 3.20 đến cận 3.60.
+- ĐRL: Từ 80 điểm đến 89 điểm (loại Tốt).
+- Mức hỗ trợ: 105% mức học phí chuẩn.
+
+3. Học bổng loại Khá:
+- GPA: Từ 2.50 đến cận 3.20.
+- ĐRL: Từ 65 điểm đến 79 điểm (loại Khá).
+- Mức hỗ trợ: 100% mức học phí chuẩn.
+
+Ghi chú: Nếu một trong hai tiêu chí (GPA hoặc ĐRL) đạt ở mức thấp hơn thì mức học bổng sẽ được hạ tương ứng theo tiêu chí thấp hơn đó.

@@ -1,0 +1,43 @@
+---
+doc_id: DOC0002
+title: Quy chế Xét cấp Học bổng Khuyến khích học tập năm 2024 (Sửa đổi & Bổ sung)
+date: 2024-01-10
+version: 2.0 (Đang có hiệu lực chính thức)
+owner: Phòng Công tác Sinh viên (CTSV)
+status: ACTIVE_CURRENT
+---
+
+QUY CHẾ SỬA ĐỔI, BỔ SUNG XÉT CẤP HỌC BỔNG KHUYẾN KHÍCH HỌC TẬP (ÁP DỤNG TỪ NĂM HỌC 2023-2024 VÀ NĂM 2024 TRỞ ĐI)
+
+Căn cứ Quyết định số 108/QĐ-ĐH ban hành ngày 10/01/2024 thay thế toàn diện Quy chế năm 2023 (DOC0001).
+
+Điều 1. Điều kiện tiên quyết xét học bổng (CẬP NHẬT MỚI)
+1. Sinh viên phải đăng ký và hoàn thành tối thiểu 15 tín chỉ trong học kỳ chính (tăng từ 14 tín chỉ của năm 2023). Các học phần học lại, cải thiện không được tính vào số tín chỉ xét học bổng.
+2. Không có môn học nào bị điểm F hoặc D (điểm thi lần 1) trong học kỳ đang xét.
+3. Không bị bất kỳ hình thức kỷ luật nào (kể cả Phê bình, Khiển trách, Cảnh cáo học vụ mức 1/2/3).
+4. Phải có đầy đủ cả 2 chỉ số: Điểm trung bình học kỳ (GPA) và Điểm rèn luyện (ĐRL). Trường hợp thiếu một trong hai chỉ số sẽ bị từ chối xét duyệt và thông báo "Chưa đủ dữ liệu để xét học bổng".
+
+Điều 2. Khung phân loại và mức học bổng chính thức 2024
+1. Loại Xuất sắc:
+- GPA: Từ 3.60 đến 4.00.
+- ĐRL: Từ 90 đến 100 điểm (Xếp loại Xuất sắc).
+- Định mức: 125% mức học phí học kỳ.
+
+2. Loại Giỏi:
+- GPA: Từ 3.20 đến dưới 3.60.
+- ĐRL: Từ 80 đến 89 điểm (Xếp loại Tốt).
+- Định mức: 110% mức học phí học kỳ.
+
+3. Loại Khá:
+- GPA: Từ 2.80 đến dưới 3.20 (lưu ý: năm 2024 đã nâng mức sàn từ 2.50 lên 2.80).
+- ĐRL: Từ 70 đến 79 điểm (nâng mức sàn từ 65 lên 70).
+- Định mức: 100% mức học phí học kỳ.
+
+Điều 3. Nguyên tắc xếp loại khi hai chỉ số lệch nhau
+- Nguyên tắc Cận dưới: Trường hợp GPA và ĐRL rơi vào hai mức khác nhau, loại học bổng được quyết định theo tiêu chí đạt mức thấp hơn.
+Ví dụ: GPA đạt 3.80 (Xuất sắc) nhưng ĐRL đạt 85 (Giỏi) -> Xếp loại Giỏi.
+Ví dụ: GPA đạt 3.10 (Khá) nhưng ĐRL đạt 95 (Xuất sắc) -> Xếp loại Khá.
+
+Điều 4. Quy trình đăng ký và xét duyệt
+- Sau khi hệ thống kiểm tra đối chiếu dữ liệu sinh viên đạt chuẩn, hệ thống tự động khởi tạo Mã đề xuất đề cử học bổng (Scholarship Nomination) và ghi nhận vào cơ sở dữ liệu.
+- Ngay sau khi khởi tạo, hệ thống phải thực hiện thao tác kiểm tra đọc lại (verify) trạng thái ghi nhận mã đề xuất để đảm bảo đơn đã được lưu trữ thành công trước khi xuất biên nhận cho sinh viên.

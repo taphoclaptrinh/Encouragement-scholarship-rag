@@ -1,0 +1,21 @@
+---
+doc_id: DOC0005
+title: Quy chế Đánh giá Kết quả Rèn luyện Sinh viên
+date: 2023-10-01
+version: 1.2
+owner: Phòng Công tác Sinh viên (CTSV)
+status: ACTIVE_CURRENT
+---
+
+QUY CHẾ ĐÁNH GIÁ KẾT QUẢ RÈN LUYỆN SINH VIÊN
+
+Điều 8. Khung phân loại điểm rèn luyện (ĐRL)
+1. Từ 90 đến 100 điểm: Xếp loại Xuất sắc.
+2. Từ 80 đến 89 điểm: Xếp loại Tốt.
+3. Từ 65 đến 79 điểm: Xếp loại Khá.
+4. Từ 50 đến 64 điểm: Xếp loại Trung bình.
+5. Dưới 50 điểm: Xếp loại Yếu / Kém.
+
+Điều 9. Ảnh hưởng của điểm rèn luyện
+- Sinh viên bị xếp loại rèn luyện Yếu, Kém trong học kỳ nào thì không được xét học bổng khuyến khích học tập và không được xét danh hiệu khen thưởng trong học kỳ đó.
+- Điểm rèn luyện chưa công bố chính thức hoặc đang trong tình trạng khiếu nại (Chưa chốt điểm) thì chưa đủ điều kiện để hội đồng ký quyết định cấp học bổng.
