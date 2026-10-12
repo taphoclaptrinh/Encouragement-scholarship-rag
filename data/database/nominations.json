@@ -31,5 +31,115 @@
     "reason": "Kiểm toán độc lập từ Client 2 xác nhận sinh viên đủ điều kiện GPA 3.85 và ĐRL 94.",
     "created_at": "2026-10-09T20:52:26.312677",
     "verified_at": "2026-10-09T20:52:26.314505"
+  },
+  {
+    "nomination_id": "NOM_20261012_B3EECC",
+    "student_id": "SV2024009",
+    "student_name": "Ngô Gia Khánh",
+    "faculty": "CNTT",
+    "scholarship_tier": "Xuất sắc",
+    "status": "SUBMITTED",
+    "reason": "Điểm GPA 3.85 và ĐRL 92 đạt chuẩn xuất sắc",
+    "created_at": "2026-10-12T15:21:03.442410",
+    "verified_at": null
+  },
+  {
+    "nomination_id": "NOM_20261012_1D3739",
+    "student_id": "SV2024002",
+    "student_name": "Trần Thị Bình",
+    "faculty": "CNTT",
+    "scholarship_tier": "Giỏi",
+    "status": "VERIFIED",
+    "reason": "GPA 3.72 và ĐRL 84",
+    "created_at": "2026-10-12T15:21:03.456500",
+    "verified_at": "2026-10-12T15:21:03.460156"
+  },
+  {
+    "nomination_id": "NOM_20261012_0B9B2E",
+    "student_id": "SV2024009",
+    "student_name": "Ngô Gia Khánh",
+    "faculty": "CNTT",
+    "scholarship_tier": "Xuất sắc",
+    "status": "SUBMITTED",
+    "reason": "Điểm GPA 3.85 và ĐRL 92 đạt chuẩn xuất sắc",
+    "created_at": "2026-10-12T15:24:11.981855",
+    "verified_at": null
+  },
+  {
+    "nomination_id": "NOM_20261012_47E1C7",
+    "student_id": "SV2024002",
+    "student_name": "Trần Thị Bình",
+    "faculty": "CNTT",
+    "scholarship_tier": "Giỏi",
+    "status": "VERIFIED",
+    "reason": "GPA 3.72 và ĐRL 84",
+    "created_at": "2026-10-12T15:24:11.985233",
+    "verified_at": "2026-10-12T15:24:11.987488"
+  },
+  {
+    "nomination_id": "NOM_20261012_11E0E1",
+    "student_id": "24110137",
+    "student_name": "Ngô Gia Khánh",
+    "faculty": "CNTT",
+    "scholarship_tier": "Xuất sắc",
+    "status": "SUBMITTED",
+    "reason": "Điểm GPA 3.86 và ĐRL 93 đạt chuẩn xuất sắc",
+    "created_at": "2026-10-12T15:39:57.773001",
+    "verified_at": null
+  },
+  {
+    "nomination_id": "NOM_20261012_CDBC53",
+    "student_id": "21110102",
+    "student_name": "Trần Thị Mai Phương",
+    "faculty": "CNTT",
+    "scholarship_tier": "Giỏi",
+    "status": "VERIFIED",
+    "reason": "GPA 3.72 và ĐRL 84",
+    "created_at": "2026-10-12T15:39:57.776141",
+    "verified_at": "2026-10-12T15:39:57.778567"
+  },
+  {
+    "nomination_id": "NOM_20261012_D106C0",
+    "student_id": "24110137",
+    "student_name": "Ngô Gia Khánh",
+    "faculty": "CNTT",
+    "scholarship_tier": "Xuất sắc",
+    "status": "SUBMITTED",
+    "reason": "Điểm GPA 3.86 và ĐRL 93 đạt chuẩn xuất sắc",
+    "created_at": "2026-10-12T15:41:41.898290",
+    "verified_at": null
+  },
+  {
+    "nomination_id": "NOM_20261012_D4BBCB",
+    "student_id": "23110102",
+    "student_name": "Trần Thị Mai Phương",
+    "faculty": "CNTT",
+    "scholarship_tier": "Giỏi",
+    "status": "VERIFIED",
+    "reason": "GPA 3.72 và ĐRL 84",
+    "created_at": "2026-10-12T15:41:41.903574",
+    "verified_at": "2026-10-12T15:41:41.906758"
+  },
+  {
+    "nomination_id": "NOM_20261012_C4DA08",
+    "student_id": "24110137",
+    "student_name": "Ngô Gia Khánh",
+    "faculty": "FIE",
+    "scholarship_tier": "Xuất sắc",
+    "status": "SUBMITTED",
+    "reason": "Điểm GPA 3.86 và ĐRL 93 đạt chuẩn xuất sắc",
+    "created_at": "2026-10-12T15:56:32.090418",
+    "verified_at": null
+  },
+  {
+    "nomination_id": "NOM_20261012_E473B1",
+    "student_id": "23110102",
+    "student_name": "Trần Thị Mai Phương",
+    "faculty": "CNTT",
+    "scholarship_tier": "Giỏi",
+    "status": "VERIFIED",
+    "reason": "GPA 3.72 và ĐRL 84",
+    "created_at": "2026-10-12T15:56:32.093693",
+    "verified_at": "2026-10-12T15:56:32.095508"
   }
 ]
