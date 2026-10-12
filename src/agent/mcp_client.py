@@ -74,3 +74,12 @@ class DynamicMCPClient:
             # Lỗi ngoại lệ nghiệp vụ khác
             logger.error(f"Lỗi xảy ra trong quá trình thực thi tool '{tool_name}': {e}")
             return f"Error: Ngoại lệ xảy ra trong tool '{tool_name}': {str(e)}"
+
+    def get_tools_description_text(self) -> str:
+        tools = self.discover_tools()
+        lines = []
+        for t in tools:
+            lines.append(f"- {t['name']}: {t['description']}")
+        return "\n".join(lines)
+
+    
