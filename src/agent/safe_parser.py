@@ -1,9 +1,3 @@
-"""
-PARSER ACTION AN TOÀN (YÊU CẦU TUẦN W6)
-Yêu cầu:
-- Parse Action và Action Input từ output văn bản của LLM
-- Xử lý ngoại lệ an toàn: Khi thiếu dấu ngoặc nhọn, dấu nháy kép, không làm crash toàn bộ run
-"""
 import re
 import json
 from typing import Tuple, Optional, Dict, Any
@@ -11,16 +5,6 @@ from typing import Tuple, Optional, Dict, Any
 class SafeActionParser:
     @staticmethod
     def parse(llm_output: str) -> Tuple[Optional[str], Optional[Dict[str, Any]], Optional[str]]:
-        """
-        Phân tích kết quả từ LLM.
-        Trả về: (action_name, action_input_dict, final_answer)
-
-        TODO (Thành viên phụ trách Agent Loop):
-        1. Kiểm tra xem LLM có trả về "Final Answer:" hay không -> Trả về (None, None, final_answer).
-        2. Dùng regex tìm 'Action: <tool_name>'.
-        3. Dùng regex tìm 'Action Input: <json_args>'.
-        4. Bọc json.loads trong try...except để không bị crash khi LLM sinh cú pháp JSON lỗi.
-        """
         if not llm_output or not llm_output.strip():
             return None, None, "Error: LLM trả về phản hồi rỗng."
 
