@@ -1,11 +1,3 @@
-"""
-MODULE GỌI API LLM (YÊU CẦU TUẦN W2)
-Yêu cầu:
-- Tách prompt khỏi code (đọc template từ thư mục prompts/)
-- Triển khai hàm call_llm có cơ chế Retry (với Exponential Backoff) khi gặp lỗi mạng
-- Có Timeout và ghi nhận Log lỗi HTTP / API
-- Đo lường và trả về số token (prompt_tokens, completion_tokens) và độ trễ (latency_seconds)
-"""
 import os
 import time
 import logging
@@ -34,7 +26,7 @@ class LLMClient:
                 logger.warning(f"Lỗi khi nạp google.genai: {e}. Sẽ dùng fallback offline.")
 
     def call(self, prompt: str, temperature: float = 0.2) -> Tuple[str, int, int, float]:
-        start_time = None
+        start_time = time.time()
 
         if not self._client:
             latency = time.time() - start_time

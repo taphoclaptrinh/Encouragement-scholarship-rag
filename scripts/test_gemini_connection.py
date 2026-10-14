@@ -1,7 +1,3 @@
-"""
-Script kiểm tra kết nối và tính sẵn sàng của Gemini API Key và các Models đã cấu hình.
-Chạy lệnh: python scripts/test_gemini_connection.py
-"""
 import os
 from dotenv import load_dotenv
 from google import genai

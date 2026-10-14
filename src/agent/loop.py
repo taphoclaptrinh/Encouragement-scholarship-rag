@@ -1,13 +1,3 @@
-"""
-VÒNG LẶP AGENT TỰ VIẾT (YÊU CẦU TUẦN W6)
-Yêu cầu bắt buộc:
-1. Vòng lặp ReAct do sinh viên tự viết tay (không dùng LangChain Agent hay CrewAI).
-2. Dynamic tool discovery từ MCP Client.
-3. Có MAX_STEPS chặn lặp vô tận.
-4. Tool lỗi trả chuỗi "Error: ..." (không làm chết run).
-5. BẮT BUỘC có cặp: write_tool() -> gọi lại verify_tool() ngay sau đó.
-6. Ghi nhận và trả về USAGE tokens chi tiết (calls, prompt_tokens, completion_tokens).
-"""
 import os
 import json
 import logging

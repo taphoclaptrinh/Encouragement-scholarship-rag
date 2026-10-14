@@ -1,10 +1,3 @@
-"""
-DYNAMIC MCP CLIENT (YÊU CẦU TUẦN W7 & W6)
-Cầu nối giữa Agent Loop và MCP Server:
-1. Dynamic Discovery: Khám phá động danh sách tools từ MCP Server.
-2. Safe Tool Execution: Bắt mọi ngoại lệ (TypeError, Exception) trả về chuỗi "Error: ...".
-3. Hỗ trợ đầy đủ get_tools_description_text cho Agent Prompt.
-"""
 import logging
 import asyncio
 from typing import List, Dict, Any, Optional
