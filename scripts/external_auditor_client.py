@@ -3,7 +3,7 @@ HOST / CLIENT ĐỘC LẬP THỨ HAI
 Chứng minh MCP Server do sinh viên xây dựng có tính tương thích cao,
 có thể được phát hiện động và gọi từ một Client Python thứ hai độc lập.
 
-ĐẠT ĐIỂM CỘNG +1 THEO MỤC 3 CỦA TÀI LIỆU YÊU CẦU:
+
 "MCP server dùng được từ host thứ hai"
 """
 import os
@@ -30,9 +30,9 @@ async def run_external_audit():
     for t in tools:
         print(f"    - {t.name}: {t.description.strip().splitlines()[0]}")
 
-    # 2. Gọi Tool 1: Đọc hồ sơ sinh viên SV2024001
+    # 2. Gọi Tool 1: Đọc hồ sơ sinh viên 24110137
     print("\n[2] Client thứ hai gọi READ TOOL 'get_student_academic_record':")
-    record_str = await mcp.call_tool("get_student_academic_record", {"student_id": "SV2024001"})
+    record_str = await mcp.call_tool("get_student_academic_record", {"student_id": "24110137"})
     # Lấy text content từ kết quả trả về của MCP
     record_text = record_str.content[0].text if hasattr(record_str, "content") else str(record_str)
     print(f"    Kết quả từ Server: {record_text}")
@@ -40,9 +40,9 @@ async def run_external_audit():
     # 3. Gọi Tool 2: Ghi nhận đề xuất 
     print("\n[3] Client thứ hai gọi WRITE TOOL 'submit_scholarship_nomination':")
     submit_res = await mcp.call_tool("submit_scholarship_nomination", {
-        "student_id": "SV2024001",
+        "student_id": "24110137",
         "scholarship_tier": "Xuất sắc",
-        "reason": "Kiểm toán độc lập từ Client 2 xác nhận sinh viên đủ điều kiện GPA 3.85 và ĐRL 94."
+        "reason": "Kiểm toán độc lập từ Client 2 xác nhận sinh viên đủ điều kiện GPA 3.86 và ĐRL 93."
     })
     submit_text = submit_res.content[0].text if hasattr(submit_res, "content") else str(submit_res)
     print(f"    Kết quả từ Server: {submit_text}")
