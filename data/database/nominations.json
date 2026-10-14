@@ -141,5 +141,126 @@
     "reason": "GPA 3.72 và ĐRL 84",
     "created_at": "2026-10-12T15:56:32.093693",
     "verified_at": "2026-10-12T15:56:32.095508"
+  },
+  {
+    "nomination_id": "NOM_20261013_750CA6",
+    "student_id": "23110101",
+    "student_name": "Nguyễn Hoàng Nam",
+    "faculty": "CNTT",
+    "scholarship_tier": "Xuất sắc",
+    "status": "VERIFIED",
+    "reason": "Đạt chuẩn GPA 3.88 và ĐRL 95",
+    "created_at": "2026-10-13T21:16:26.406277",
+    "verified_at": "2026-10-13T21:16:26.413320"
+  },
+  {
+    "nomination_id": "NOM_20261013_9541C9",
+    "student_id": "23110102",
+    "student_name": "Trần Thị Mai Phương",
+    "faculty": "CNTT",
+    "scholarship_tier": "Giỏi",
+    "status": "VERIFIED",
+    "reason": "GPA 3.72 và ĐRL 84",
+    "created_at": "2026-10-13T21:16:26.421665",
+    "verified_at": "2026-10-13T21:16:26.428507"
+  },
+  {
+    "nomination_id": "NOM_20261013_2670D9",
+    "student_id": "23110101",
+    "student_name": "Nguyễn Hoàng Nam",
+    "faculty": "CNTT",
+    "scholarship_tier": "Xuất sắc",
+    "status": "VERIFIED",
+    "reason": "Đạt chuẩn GPA 3.88 và ĐRL 95",
+    "created_at": "2026-10-13T21:16:41.451404",
+    "verified_at": "2026-10-13T21:16:41.455931"
+  },
+  {
+    "nomination_id": "NOM_20261013_ADBBAF",
+    "student_id": "23110102",
+    "student_name": "Trần Thị Mai Phương",
+    "faculty": "CNTT",
+    "scholarship_tier": "Giỏi",
+    "status": "VERIFIED",
+    "reason": "GPA 3.72 và ĐRL 84",
+    "created_at": "2026-10-13T21:16:41.460708",
+    "verified_at": "2026-10-13T21:16:41.465368"
+  },
+  {
+    "nomination_id": "NOM_20261013_609DCA",
+    "student_id": "23110101",
+    "student_name": "Nguyễn Hoàng Nam",
+    "faculty": "CNTT",
+    "scholarship_tier": "Xuất sắc",
+    "status": "VERIFIED",
+    "reason": "Đạt chuẩn GPA 3.88 và ĐRL 95",
+    "created_at": "2026-10-13T21:17:21.054935",
+    "verified_at": "2026-10-13T21:17:21.060036"
+  },
+  {
+    "nomination_id": "NOM_20261013_A5AF19",
+    "student_id": "23110102",
+    "student_name": "Trần Thị Mai Phương",
+    "faculty": "CNTT",
+    "scholarship_tier": "Giỏi",
+    "status": "VERIFIED",
+    "reason": "GPA 3.72 và ĐRL 84",
+    "created_at": "2026-10-13T21:17:21.064608",
+    "verified_at": "2026-10-13T21:17:21.068881"
+  },
+  {
+    "nomination_id": "NOM_20261013_B10C93",
+    "student_id": "23110101",
+    "student_name": "Nguyễn Hoàng Nam",
+    "faculty": "CNTT",
+    "scholarship_tier": "Xuất sắc",
+    "status": "VERIFIED",
+    "reason": "Đạt chuẩn GPA 3.88 và ĐRL 95",
+    "created_at": "2026-10-13T21:19:32.717215",
+    "verified_at": "2026-10-13T21:19:32.730054"
+  },
+  {
+    "nomination_id": "NOM_20261013_F60AE1",
+    "student_id": "23110101",
+    "student_name": "Nguyễn Hoàng Nam",
+    "faculty": "CNTT",
+    "scholarship_tier": "Xuất sắc",
+    "status": "VERIFIED",
+    "reason": "Đạt chuẩn GPA 3.88 và ĐRL 95",
+    "created_at": "2026-10-13T21:32:41.143409",
+    "verified_at": "2026-10-13T21:32:41.156757"
+  },
+  {
+    "nomination_id": "NOM_20261013_BC6338",
+    "student_id": "24110137",
+    "student_name": "Ngô Gia Khánh",
+    "faculty": "FIE",
+    "scholarship_tier": "Xuất sắc",
+    "status": "VERIFIED",
+    "reason": "Kiểm toán độc lập từ Client 2 xác nhận sinh viên đủ điều kiện GPA 3.86 và ĐRL 93.",
+    "created_at": "2026-10-13T21:33:28.508230",
+    "verified_at": "2026-10-13T21:33:28.511802"
+  },
+  {
+    "nomination_id": "NOM_20261013_FDD1BF",
+    "student_id": "24110137",
+    "student_name": "Ngô Gia Khánh",
+    "faculty": "FIE",
+    "scholarship_tier": "Xuất sắc",
+    "status": "SUBMITTED",
+    "reason": "Điểm GPA 3.86 và ĐRL 93 đạt chuẩn xuất sắc",
+    "created_at": "2026-10-13T21:33:53.168597",
+    "verified_at": null
+  },
+  {
+    "nomination_id": "NOM_20261013_C70158",
+    "student_id": "23110102",
+    "student_name": "Trần Thị Mai Phương",
+    "faculty": "CNTT",
+    "scholarship_tier": "Giỏi",
+    "status": "VERIFIED",
+    "reason": "GPA 3.72 và ĐRL 84",
+    "created_at": "2026-10-13T21:33:53.171525",
+    "verified_at": "2026-10-13T21:33:53.173303"
   }
 ]
