@@ -18,6 +18,8 @@ from src.mcp_server.server import (
     get_student_academic_record,
     submit_scholarship_nomination,
     verify_scholarship_nomination,
+    get_faculty_scholarship_budget,
+    cancel_scholarship_nomination,
     NOMINATIONS_FILE
 )
 from src.agent.mcp_client import DynamicMCPClient
@@ -89,6 +91,49 @@ class TestMCPServerAndClient(unittest.TestCase):
         """Kiểm tra gọi sai tên tool qua client không làm crash ứng dụng"""
         res = self.client.call_tool("invalid_tool_name", {})
         self.assertTrue(res.startswith("Error:"))
+
+    def test_07_get_faculty_scholarship_budget(self):
+        """Kiểm tra tra cứu định mức ngân sách học bổng của Khoa/Viện (Tool 4)"""
+        # Test hợp lệ cho Viện FIE
+        raw_fie = get_faculty_scholarship_budget("FIE")
+        data_fie = json.loads(raw_fie)
+        self.assertEqual(data_fie["faculty"], "FIE")
+        self.assertEqual(data_fie["total_slots"], 20)
+        self.assertEqual(data_fie["tier_a_slots"], 5)
+
+        # Test hợp lệ cho Khoa CNTT
+        raw_cntt = get_faculty_scholarship_budget("CNTT")
+        data_cntt = json.loads(raw_cntt)
+        self.assertEqual(data_cntt["faculty"], "CNTT")
+        self.assertEqual(data_cntt["total_slots"], 45)
+
+        # Test an toàn khi nhập khoa không tồn tại
+        res_err = get_faculty_scholarship_budget("UNKNOWN_FACULTY")
+        self.assertTrue(res_err.startswith("Error:"))
+
+    def test_08_cancel_scholarship_nomination(self):
+        """Kiểm tra hủy đơn đề cử học bổng và đổi trạng thái CANCELLED (Tool 5)"""
+        # 1. Tạo một đơn đề cử mới
+        create_res = json.loads(submit_scholarship_nomination(
+            student_id="24110137",
+            scholarship_tier="Xuất sắc",
+            reason="Test hủy đề cử do khiếu nại"
+        ))
+        nom_id = create_res["data"]["nomination_id"]
+
+        # 2. Gọi tool hủy đơn
+        cancel_res_raw = cancel_scholarship_nomination(nom_id, "Sinh viên có khiếu nại kỷ luật đột xuất")
+        cancel_res = json.loads(cancel_res_raw)
+        self.assertTrue(cancel_res["success"])
+        self.assertEqual(cancel_res["data"]["status"], "CANCELLED")
+
+        # 3. Đối soát lại trong file CSDL
+        with open(NOMINATIONS_FILE, "r", encoding="utf-8") as f:
+            nominations = json.load(f)
+        record = next((n for n in nominations if n["nomination_id"] == nom_id), None)
+        self.assertIsNotNone(record)
+        self.assertEqual(record["status"], "CANCELLED")
+        self.assertIsNotNone(record.get("cancelled_at"))
 
 if __name__ == "__main__":
     unittest.main()

@@ -18,7 +18,7 @@ from typing import Dict, Any, List, Optional
 from dataclasses import asdict
 
 from ..schemas.student import StudentRecord
-from ..schemas.tool_contracts import NominationRecord, ToolResult
+from ..schemas.tool_contracts import NominationRecord, ToolResult, FacultyBudgetRecord
 
 # 1. CẤM PRINT RA STDOUT: Mọi thông tin debug/log bắt buộc ghi vào sys.stderr
 logging.basicConfig(
@@ -242,6 +242,133 @@ def verify_scholarship_nomination(nomination_id: str) -> str:
     except Exception as e:
         logger.error(f"Ngoại lệ khi verify đề cử: {e}")
         return f"Error: Lỗi hệ thống khi xác minh đề cử: {str(e)}"
+
+
+# =======================================================
+# TOOL 4: TRA CỨU ĐỊNH MỨC NGÂN SÁCH KHOA/VIỆN (READ TOOL)
+# =======================================================
+FACULTY_BUDGETS: Dict[str, FacultyBudgetRecord] = {
+    "CNTT": FacultyBudgetRecord(
+        faculty="CNTT",
+        faculty_name="Khoa Công nghệ Thông tin",
+        total_budget_vnd=450000000,
+        total_slots=45,
+        tier_a_slots=10,
+        tier_b_slots=15,
+        tier_c_slots=20,
+        note="Căn cứ Quyết định phân bổ ngân sách DOC0004. Tối đa không quá 8% tổng sĩ số khóa."
+    ),
+    "FIE": FacultyBudgetRecord(
+        faculty="FIE",
+        faculty_name="Viện Đào tạo Quốc tế",
+        total_budget_vnd=250000000,
+        total_slots=20,
+        tier_a_slots=5,
+        tier_b_slots=7,
+        tier_c_slots=8,
+        note="Chương trình liên kết và đào tạo quốc tế chất lượng cao theo DOC0006."
+    ),
+    "CKD": FacultyBudgetRecord(
+        faculty="CKD",
+        faculty_name="Khoa Cơ khí Động lực",
+        total_budget_vnd=400000000,
+        total_slots=40,
+        tier_a_slots=8,
+        tier_b_slots=12,
+        tier_c_slots=20,
+        note="Phân bổ theo định mức ngân sách đào tạo kỹ thuật công nghệ."
+    ),
+    "DDT": FacultyBudgetRecord(
+        faculty="DDT",
+        faculty_name="Khoa Điện - Điện tử",
+        total_budget_vnd=420000000,
+        total_slots=42,
+        tier_a_slots=9,
+        tier_b_slots=13,
+        tier_c_slots=20,
+        note="Ưu tiên sinh viên có thành tích nghiên cứu khoa học và sáng tạo."
+    )
+}
+
+@mcp.tool()
+def get_faculty_scholarship_budget(faculty: str) -> str:
+    """
+    [READ TOOL] Tra cứu hạn mức ngân sách học bổng và chỉ tiêu phân bổ số suất theo từng Khoa/Viện.
+    Tham số faculty: mã khoa (ví dụ: 'CNTT', 'FIE', 'CKD', 'DDT').
+    """
+    try:
+        fac = (faculty or "").strip().upper()
+        logger.info(f"Đang tra cứu ngân sách học bổng khoa/viện: {fac}")
+
+        if not fac:
+            return "Error: faculty không được để trống."
+
+        if fac in FACULTY_BUDGETS:
+            record = FACULTY_BUDGETS[fac]
+            return json.dumps(asdict(record), ensure_ascii=False)
+
+        available_faculties = ", ".join(FACULTY_BUDGETS.keys())
+        return f"Error: Không tìm thấy dữ liệu ngân sách cho khoa '{fac}'. Các khoa hiện có: {available_faculties}"
+    except Exception as e:
+        logger.error(f"Ngoại lệ khi tra cứu ngân sách: {e}")
+        return f"Error: Lỗi khi tra cứu ngân sách khoa: {str(e)}"
+
+
+# =======================================================
+# TOOL 5: HỦY ĐƠN ĐỀ CỬ HỌC BỔNG (WRITE TOOL - SIDE EFFECT)
+# =======================================================
+@mcp.tool()
+def cancel_scholarship_nomination(nomination_id: str, reason: str) -> str:
+    """
+    [WRITE TOOL - SIDE EFFECT] Hủy bỏ hoặc thu hồi một đơn đề cử học bổng trong cơ sở dữ liệu nếu phát hiện có sai sót hoặc vi phạm kỷ luật.
+    Thao tác này làm thay đổi trạng thái bản ghi trong CSDL sang 'CANCELLED'.
+    """
+    try:
+        nid = (nomination_id or "").strip()
+        rs = (reason or "").strip()
+        logger.info(f"[SIDE-EFFECT] Hủy đơn đề cử học bổng mã: {nid}, lý do: {rs}")
+
+        if not nid:
+            return "Error: nomination_id không được để trống."
+        if not rs:
+            return "Error: Phải cung cấp lý do hủy đề cử (reason)."
+
+        nominations = _read_json_file(NOMINATIONS_FILE)
+        target_nomination = None
+        target_index = -1
+
+        for idx, nom in enumerate(nominations):
+            if nom.get("nomination_id") == nid:
+                target_nomination = nom
+                target_index = idx
+                break
+
+        if not target_nomination:
+            return f"Error: Hủy đề cử thất bại. Không tìm thấy mã '{nid}' trong CSDL."
+
+        cancelled_at = datetime.now().isoformat()
+        target_nomination["status"] = "CANCELLED"
+        target_nomination["cancelled_at"] = cancelled_at
+        target_nomination["cancellation_reason"] = rs
+        nominations[target_index] = target_nomination
+
+        _write_json_file(NOMINATIONS_FILE, nominations)
+
+        result = ToolResult(
+            success=True,
+            data={
+                "nomination_id": nid,
+                "student_id": target_nomination.get("student_id"),
+                "status": "CANCELLED",
+                "cancelled_at": cancelled_at,
+                "reason": rs,
+                "message": f"Đã hủy bỏ đề cử học bổng '{nid}' thành công trong CSDL."
+            }
+        )
+        return json.dumps(asdict(result), ensure_ascii=False)
+    except Exception as e:
+        logger.error(f"Ngoại lệ khi hủy đề cử: {e}")
+        return f"Error: Lỗi hệ thống khi hủy đề cử: {str(e)}"
 
 
 # =======================================================
