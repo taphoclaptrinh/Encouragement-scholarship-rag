@@ -37,7 +37,7 @@ class LLMClient:
         start_time = time.time()
 
         # =====================================================================
-        # NHÁNH GỌI LOCAL LLM (OLLAMA / GPU RTX 5070 QWEN2.5)
+        # NHÁNH GỌI LOCAL LLM (OLLAMA)
         # Tự động kích hoạt khi LLM_PROVIDER=local trong file .env
         # =====================================================================
         if self.provider == "local":
