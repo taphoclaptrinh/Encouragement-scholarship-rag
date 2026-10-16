@@ -10,14 +10,22 @@ logger = logging.getLogger("LLMClient")
 class LLMClient:
     def __init__(self, model_name: Optional[str] = None, timeout: float = 30.0, max_retries: int = 3):
         self.api_key = os.getenv("GEMINI_API_KEY", "")
-        self.model_name = model_name or os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
+        self.model_name = model_name or os.getenv("GEMINI_MODEL", "gemini-3.5-flash-lite")
         self.timeout = timeout
         self.max_retries = max_retries
+
+        # CẤU HÌNH LOCAL LLM (OLLAMA / GPU RTX 5070):
+        # Mặc định hệ thống dùng 'gemini'. Khi muốn chuyển sang chạy mô hình nội bộ,
+        # bạn đổi trong .env: LLM_PROVIDER=local
+        self.provider = os.getenv("LLM_PROVIDER", "gemini").lower()
+        self.local_url = os.getenv("LOCAL_LLM_URL", "http://localhost:11434/v1/chat/completions")
+        self.local_model = os.getenv("LOCAL_MODEL_NAME", "qwen2.5:7b")
+
         self._init_client()
 
     def _init_client(self):
         self._client = None
-        if self.api_key and self.api_key != "your_gemini_api_key_here":
+        if self.provider == "gemini" and self.api_key and self.api_key != "your_gemini_api_key_here":
             try:
                 from google import genai
                 self._client = genai.Client(api_key = self.api_key)
@@ -27,6 +35,35 @@ class LLMClient:
 
     def call(self, prompt: str, temperature: float = 0.2) -> Tuple[str, int, int, float]:
         start_time = time.time()
+
+        # =====================================================================
+        # NHÁNH GỌI LOCAL LLM (OLLAMA / GPU RTX 5070 QWEN2.5)
+        # Tự động kích hoạt khi LLM_PROVIDER=local trong file .env
+        # =====================================================================
+        if self.provider == "local":
+            import httpx
+            payload = {
+                "model": self.local_model,
+                "messages": [{"role": "user", "content": prompt}],
+                "temperature": temperature,
+                "stream": False
+            }
+            try:
+                with httpx.Client(timeout=self.timeout) as http_client:
+                    res = http_client.post(self.local_url, json=payload)
+                    res.raise_for_status()
+                    data = res.json()
+                    text = data["choices"][0]["message"]["content"]
+                    usage = data.get("usage", {})
+                    p_tok = usage.get("prompt_tokens", len(prompt) // 4)
+                    c_tok = usage.get("completion_tokens", len(text) // 4)
+                    latency = time.time() - start_time
+                    return text, p_tok, c_tok, latency
+            except Exception as e:
+                logger.error(f"[Local LLM Error] Không thể kết nối tới Ollama ({self.local_url}): {e}")
+                latency = time.time() - start_time
+                return f"Error: Local LLM failed ({e})", len(prompt) // 4, 10, latency
+        # =====================================================================
 
         if not self._client:
             latency = time.time() - start_time
