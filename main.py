@@ -52,23 +52,37 @@ def interactive_chat():
         "3": "Hãy kiểm tra hồ sơ học tập của sinh viên Nguyễn Văn An (mã số SV2024001). Nếu đủ điều kiện loại Xuất sắc, hãy thực hiện nộp đơn đề cử học bổng và xác minh mã đơn trên hệ thống."
     }
 
+    streaming_enabled = True
+
     print("\n[OK] Hệ thống đã sẵn sàng!")
-    print("Bạn có thể gõ câu hỏi tự do, HOẶC dùng phím tắt chạy nhanh 3 trường hợp mẫu:")
+    print("Bạn có thể gõ câu hỏi tự do, HOẶC dùng các lệnh điều khiển tiện ích:")
     print("  👉 Gõ [1] hoặc [demo1]: Tra cứu & So sánh quy chế đa phiên bản (2023 vs 2024)")
     print("  👉 Gõ [2] hoặc [demo2]: Suy luận nguyên tắc cận dưới (GPA 3.75 & ĐRL 82)")
     print("  👉 Gõ [3] hoặc [demo3]: Thẩm định hồ sơ + Nộp đơn đề cử + Tự động xác minh")
+    print("  👉 Gõ [stream on] hoặc [stream off]: Bật / Tắt hiệu ứng hiển thị chữ Streaming")
     print("  👉 Gõ 'exit', 'quit' hoặc 'q' để kết thúc trò chuyện.\n")
     print("-" * 75)
 
     while True:
         try:
-            user_input = input("\n👤 BẠN: ").strip()
+            stream_status = "BẬT" if streaming_enabled else "TẮT"
+            user_input = input(f"\n👤 BẠN [Stream: {stream_status}]: ").strip()
             if not user_input:
                 continue
 
             if user_input.lower() in ["exit", "quit", "q"]:
                 print("\nCảm ơn bạn đã sử dụng Trợ lý Học bổng. Tạm biệt!\n")
                 break
+
+            # Lệnh Bật / Tắt chế độ Streaming
+            if user_input.lower() in ["stream on", "streaming on", "stream:on"]:
+                streaming_enabled = True
+                print("⚡ [HỆ THỐNG]: Đã BẬT chế độ Streaming (Hiển thị từng từ trực quan)!")
+                continue
+            elif user_input.lower() in ["stream off", "streaming off", "stream:off"]:
+                streaming_enabled = False
+                print("⚡ [HỆ THỐNG]: Đã TẮT chế độ Streaming (In một lần toàn bộ văn bản)!")
+                continue
 
             # Kiểm tra nếu người dùng dùng phím tắt chạy 3 trường hợp dựng sẵn
             clean_input = user_input.lower().replace("demo", "").strip()
@@ -95,9 +109,17 @@ def interactive_chat():
                         print(f"  ⚡ Gọi Tool [{act}] | Tham số: {args}")
                         print(f"     -> Phản hồi: {obs_short}")
 
-            # 2. Hiển thị câu trả lời cuối cùng
+            # 2. Hiển thị câu trả lời cuối cùng (Hỗ trợ Streaming hoặc In thẳng)
             print("\n" + "=" * 35 + " PHẢN HỒI " + "=" * 35)
-            print(result.get("final_answer", "").strip())
+            final_text = result.get("final_answer", "").strip()
+            if streaming_enabled:
+                for char in final_text:
+                    sys.stdout.write(char)
+                    sys.stdout.flush()
+                    time.sleep(0.005)
+                print()
+            else:
+                print(final_text)
             print("=" * 80)
 
             # 3. Thống kê nhanh

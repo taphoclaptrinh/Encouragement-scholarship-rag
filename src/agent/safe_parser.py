@@ -10,17 +10,18 @@ class SafeActionParser:
 
         text = llm_output.strip()
 
-        #--- Kiem tra Final Answer ---
+        #--- Kiểm tra nếu có Action TRƯỚC Final Answer (ưu tiên gọi tool trước) ---
+        action_match = re.search(r"Action:\s*([a-zA-Z0-9_\-]+)", text)
         final_match = re.search(r"Final Answer:\s*(.*)", text, re.DOTALL | re.IGNORECASE)
 
-        if final_match and "Action:" not in text[final_match.start():]:
+        # Nếu có Final Answer và (không có Action HOẶC Final Answer đứng trước Action) -> Kết thúc
+        if final_match and (not action_match or final_match.start() < action_match.start()):
             final_content = final_match.group(1).strip()
             return None, None, final_content
 
-        #--- Tim Action ---
-        action_match = re.search(r"Action:\s*([a-zA-Z0-9_\-]+)", text)
+        # Nếu không có Action nào cả -> Trả về text dạng kết thúc
         if not action_match:
-            return None, None, text 
+            return None, None, text
 
         action_name = action_match.group(1).strip()
 

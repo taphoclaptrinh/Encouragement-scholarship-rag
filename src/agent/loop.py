@@ -182,5 +182,19 @@ class ScholarshipAgent:
                 formatted.append(f"[{r.chunk.chunk_id}] (Score: {r.score:.3f})\n{r.chunk.text}")
             return "\n\n---\n\n".join(formatted)
 
+        # Chuẩn hóa tham số cho tool submit_scholarship_nomination (ánh xạ alias tự nhiên của LLM)
+        if tool_name == "submit_scholarship_nomination":
+            clean_args = dict(args)
+            if "scholarship_tier" not in clean_args:
+                clean_args["scholarship_tier"] = (
+                    clean_args.get("scholarship_level")
+                    or clean_args.get("tier")
+                    or clean_args.get("level")
+                    or "Xuất sắc"
+                )
+            if "reason" not in clean_args:
+                clean_args["reason"] = clean_args.get("description") or clean_args.get("note") or "Đủ tiêu chuẩn xét cấp học bổng theo quy chế"
+            return self.mcp_client.call_tool(tool_name, clean_args)
+
         # Mọi tool còn lại gọi qua MCP Client
         return self.mcp_client.call_tool(tool_name, args)
