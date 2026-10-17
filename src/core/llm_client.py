@@ -14,9 +14,9 @@ class LLMClient:
         self.timeout = timeout
         self.max_retries = max_retries
 
-        # CẤU HÌNH LOCAL LLM (OLLAMA / GPU RTX 5070):
-        # Mặc định hệ thống dùng 'gemini'. Khi muốn chuyển sang chạy mô hình nội bộ,
-        # bạn đổi trong .env: LLM_PROVIDER=local
+        # CẤU HÌNH LOCAL LLM (OLLAMA / GPU):
+        # Mặc định dùng 'gemini'. Khi muốn chuyển sang chạy mô hình nội bộ,
+        # đổi trong .env: LLM_PROVIDER=local
         self.provider = os.getenv("LLM_PROVIDER", "gemini").lower()
         self.local_url = os.getenv("LOCAL_LLM_URL", "http://localhost:11434/v1/chat/completions")
         self.local_model = os.getenv("LOCAL_MODEL_NAME", "qwen2.5:7b")
@@ -38,16 +38,12 @@ class LLMClient:
 
         # =====================================================================
         # NHÁNH GỌI LOCAL LLM (OLLAMA)
-        # Tự động kích hoạt khi LLM_PROVIDER=local trong file .env
         # =====================================================================
         if self.provider == "local":
             import httpx
             payload = {
                 "model": self.local_model,
-                "messages": [
-                    {"role": "system", "content": "Bạn là trợ lý AI học bổng. BẮT BUỘC suy nghĩ và trả lời hoàn toàn bằng TIẾNG VIỆT."},
-                    {"role": "user", "content": prompt}
-                ],
+                "messages": [{"role": "user", "content": prompt}],
                 "temperature": temperature,
                 "stream": False
             }
@@ -66,11 +62,14 @@ class LLMClient:
                 logger.error(f"[Local LLM Error] Không thể kết nối tới Ollama ({self.local_url}): {e}")
                 latency = time.time() - start_time
                 return f"Error: Local LLM failed ({e})", len(prompt) // 4, 10, latency
-        # =====================================================================
 
+        # =====================================================================
+        # NHÁNH FALLBACK OFFLINE THÔNG MINH (KHI CHƯA CÓ KEY)
+        # =====================================================================
         if not self._client:
+            from .mock_agent_reasoner import generate_smart_mock_response
             latency = time.time() - start_time
-            mock_text = "[OFFLINE] Phản hồi thử nghiệm từ hệ thống."
+            mock_text = generate_smart_mock_response(prompt)
             return mock_text, len(prompt) // 4, len(mock_text) // 4, latency
         last_error = None
         for attempt in range(1, self.max_retries + 1):
@@ -98,19 +97,9 @@ class LLMClient:
                 return response.text or "", prompt_tokens, completion_tokens, latency
             except Exception as e:
                 last_error = e
-                # Kiểm tra nếu dính lỗi 429 Rate Limit từ Google API và có gợi ý retryDelay
-                err_str = str(e)
-                wait_time = (2 ** attempt) * 1.0
-                if "429" in err_str or "RESOURCE_EXHAUSTED" in err_str:
-                    import re
-                    # Bắt số giây Google yêu cầu đợi (ví dụ: 'retryDelay': '28s' hoặc 'Please retry in 28.5s')
-                    match = re.search(r"retry in (\d+(?:\.\d+)?)s", err_str) or re.search(r"'retryDelay':\s*'(\d+)s'", err_str)
-                    if match:
-                        wait_time = float(match.group(1)) + 1.0  # Đợi đúng số giây Google yêu cầu + 1s an toàn
-                    else:
-                        wait_time = 15.0
-
-                logger.error(f"[HTTP/API Error] Lần thử {attempt}/{self.max_retries} thất bại: {e}. Đang đợi {wait_time:.1f}s...")
+                #Cong thuc : wait_time = 2^attempt * 0.5
+                wait_time = (2 ** attempt) * 0.5
+                logger.error(f"[HTTP/API Error] Lần thử {attempt}/{self.max_retries} thất bại: {e}. Đang đợi {wait_time}s...")
                 time.sleep(wait_time)
         # Nếu thử hết số lần mà vẫn lỗi -> raise hoặc trả về fallback kèm log critical
         logger.critical(f"Tất cả {self.max_retries} lần gọi LLM đều thất bại! Lỗi cuối: {last_error}")

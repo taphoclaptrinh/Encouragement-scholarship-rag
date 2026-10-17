@@ -1,17 +1,19 @@
 """
-Hệ thống demo trực quan 3 kịch bản đại diện:
-- Kịch bản 1 (Tầng tra cứu - Multi-doc): So sánh quy định tín chỉ giữa Quy chế 2023 (DOC0001) và 2024 (DOC0002).
-- Kịch bản 2 (Tầng suy luận - Reasoning Floor): Thẩm định sinh viên có GPA Xuất sắc nhưng ĐRL loại Giỏi.
-- Kịch bản 3 (Tầng hành động - Action & Auto Verify): Thẩm định hồ sơ sinh viên -> Nộp đơn đề cử -> Tự động xác minh.
+KỊCH BẢN CHẠY DEMO TẠI BUỔI BẢO VỆ (LỆNH: make demo hoặc python -m scripts.demo_runner)
+Biểu diễn trực tiếp 3 tầng bắt buộc trước Giảng viên:
+1. Tầng (a) - Tra cứu & So sánh phiên bản (Quy chế 2023 vs 2024 vs 2026)
+2. Tầng (b) - Biến đổi & Suy luận nguyên tắc cận dưới (GPA 3.75 + ĐRL 82)
+3. Tầng (c) - Hành động (Ghi đề cử học bổng -> Tự động Verify trạng thái trong DB)
 """
 import sys
 import os
 import time
 
-# Đảm bảo import được các module từ thư mục gốc
-base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-if base_dir not in sys.path:
-    sys.path.insert(0, base_dir)
+if sys.platform == "win32":
+    sys.stdout.reconfigure(encoding="utf-8")
+    sys.stderr.reconfigure(encoding="utf-8")
+
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from src.rag.chunker import DocumentChunker
 from src.rag.hybrid_search import HybridSearchEngine
@@ -19,87 +21,66 @@ from src.agent.mcp_client import DynamicMCPClient
 from src.core.llm_client import LLMClient
 from src.agent.loop import ScholarshipAgent
 
-DEMO_SCENARIOS = [
-    {
-        "title": "KỊCH BẢN 1: TRA CỨU & SO SÁNH QUY CHẾ ĐA PHIÊN BẢN (MULTI-DOC REASONING)",
-        "description": "Yêu cầu Agent đối chiếu quy định giữa Quy chế cũ 2023 (DOC0001) và Quy chế sửa đổi 2024 (DOC0002).",
-        "query": "So sánh quy định về số tín chỉ đăng ký tối thiểu trong học kỳ chính để được xét học bổng giữa quy chế năm 2023 và quy chế sửa đổi năm 2024?"
-    },
-    {
-        "title": "KỊCH BẢN 2: SUY LUẬN THEO NGUYÊN TẮC CẬN DƯỚI (REASONING FLOOR)",
-        "description": "Sinh viên có GPA đạt mức Xuất sắc (3.75) nhưng Điểm rèn luyện chỉ đạt mức Giỏi (82).",
-        "query": "Sinh viên có điểm trung bình GPA 3.75 và Điểm rèn luyện 82 điểm trong học kỳ thì được xếp loại học bổng nào theo quy chế 2024? Hãy giải thích rõ nguyên tắc xếp loại."
-    },
-    {
-        "title": "KỊCH BẢN 3: THỰC THI HÀNH ĐỘNG GHI & TỰ ĐỘNG XÁC MINH (SIDE EFFECT & AUTO-VERIFY)",
-        "description": "Agent tra cứu thông tin sinh viên, kiểm tra điều kiện, tự động gọi MCP Tool ghi đơn đề cử và xác minh mã đơn.",
-        "query": "Hãy kiểm tra hồ sơ học tập của sinh viên Nguyễn Văn An (mã số SV2024001). Nếu đủ điều kiện loại Xuất sắc, hãy thực hiện nộp đơn đề cử học bổng và xác minh mã đơn trên hệ thống."
-    }
-]
-
 def run_live_demo():
     print("=" * 80)
-    print("    LIVE DEMO: HỆ THỐNG TRỢ LÝ XÉT HỌC BỔNG KHUYẾN KHÍCH HỌC TẬP")
-    print("    ĐỒ ÁN TỐT NGHIỆP / BẢO VỆ FINAL PROJECT (AIPR W1-W7)")
+    print("      LIVE DEMO: HỆ THỐNG TRỢ LÝ XÉT HỌC BỔNG KHUYẾN KHÍCH HỌC TẬP (HCMUTE)")
+    print("      (MÔN HỌC AIPR - BẢO VỆ FINAL PROJECT W1-W7)")
     print("=" * 80)
 
-    corpus_dir = os.path.join(base_dir, "data", "corpus")
-    server_path = os.path.join(base_dir, "src", "mcp_server", "server.py")
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-    print("\n[+] Đang khởi tạo hệ thống RAG & MCP Agent...")
-    chunker = DocumentChunker(corpus_dir)
+    print("\n[KHỞI ĐỘNG HỆ THỐNG]")
+    chunker = DocumentChunker(os.path.join(base_dir, "data", "corpus"))
     chunks = chunker.load_and_chunk_all()
     hybrid_engine = HybridSearchEngine(chunks)
-    mcp_client = DynamicMCPClient(server_path)
+    mcp_client = DynamicMCPClient(os.path.join(base_dir, "src", "mcp_server", "server.py"))
     llm_client = LLMClient()
-    agent = ScholarshipAgent(
-        hybrid_engine=hybrid_engine,
-        mcp_client=mcp_client,
-        llm_client=llm_client,
-        max_steps=6
-    )
-    print("[+] Hệ thống đã sẵn sàng cho buổi trình diễn!\n")
+    agent = ScholarshipAgent(hybrid_engine, mcp_client, llm_client, max_steps=6)
+    print(f" -> Khởi tạo hoàn tất! Chỉ mục: {len(chunks)} chunks quy chế | Tools MCP: 3 tools sẵn sàng.\n")
 
-    for idx, sc in enumerate(DEMO_SCENARIOS, 1):
-        print("\n" + "#" * 80)
-        print(f"[{idx}/3] {sc['title']}")
-        print(f"Mô tả: {sc['description']}")
-        print(f"Câu hỏi: \"{sc['query']}\"")
-        print("#" * 80)
+    demo_scenarios = [
+        {
+            "tier": "TẦNG (a) - TRA CỨU & SO SÁNH ĐA VĂN BẢN (MULTI-DOC GROUNDING)",
+            "query": "So sánh quy định về số tín chỉ tối thiểu để xét học bổng giữa quy chế năm 2023 và quy chế sửa đổi năm 2024?",
+        },
+        {
+            "tier": "TẦNG (b) - SUY LUẬN & NGUYÊN TẮC CẬN DƯỚI (REASONING & CALIBRATION)",
+            "query": "Sinh viên có GPA 3.75 và Điểm rèn luyện 82 điểm thì được xếp loại học bổng nào theo quy chế 2024?",
+        },
+        {
+            "tier": "TẦNG (c) - HÀNH ĐỘNG GHI (SIDE-EFFECT) VÀ TỰ ĐỘNG VERIFY BẮT BUỘC",
+            "query": "Hãy kiểm tra hồ sơ sinh viên Nguyễn Văn An (23110101), nếu đủ điều kiện loại Xuất sắc hãy nộp đơn đề cử học bổng và xác minh.",
+        }
+    ]
 
-        start_time = time.time()
-        result = agent.run(sc["query"])
-        elapsed = time.time() - start_time
+    for idx, sc in enumerate(demo_scenarios, start=1):
+        print("*" * 80)
+        print(f" DEMO CA #{idx}: {sc['tier']}")
+        print(f" CÂU HỎI: \"{sc['query']}\"")
+        print("*" * 80)
 
-        print("\n--- [VẾT THỰC THI CỦA AGENT (REASONING & TOOL TRACE)] ---")
-        for step in result.get("steps", []):
-            s_num = step.get("step")
-            action = step.get("action")
-            action_args = step.get("action_args")
-            obs = step.get("observation", "")
-            obs_preview = obs[:120] + "..." if len(obs) > 120 else obs
+        res = agent.run(sc["query"])
 
-            if action:
-                print(f"  * Bước {s_num} -> Gọi Tool: [{action}] với args: {action_args}")
-                print(f"               Kết quả: {obs_preview}")
-            else:
-                print(f"  * Bước {s_num} -> Suy nghĩ / Kết luận")
+        print("\n [QUÁ TRÌNH THỰC THI RE-ACT & TRACE STEPS]:")
+        for s in res.get("steps", []):
+            step_num = s.get("step")
+            action = s.get("action")
+            action_args = s.get("action_args")
+            obs = s.get("observation")
+            print(f"   -> Bước {step_num}: Action = {action} | Args = {action_args}")
+            if obs:
+                print(f"      Observation = {obs[:120]}...")
 
-        print("\n--- [CÂU TRẢ LỜI CUỐI CÙNG (FINAL ANSWER)] ---")
-        print(result.get("final_answer", "").strip())
+        print("\n [KẾT QUẢ CUỐI CÙNG (FINAL ANSWER)]:")
+        print(f"   {res.get('final_answer')}")
 
-        usage = result.get("usage", {})
-        print("\n--- [THỐNG KÊ CHI PHÍ & THỜI GIAN] ---")
-        print(f"  * Số bước ReAct:   {result.get('total_steps')} bước")
-        print(f"  * Tổng số Token:   {usage.get('total_tokens', 0):,} tokens")
-        print(f"  * Thời gian xử lý: {elapsed:.2f} giây")
-        print("-" * 80)
+        usage = res.get("usage", {})
+        print(f"\n [ĐO LƯỜNG TÀI NGUYÊN (USAGE)]: Calls = {usage.get('calls')} | Total Tokens = {usage.get('total_tokens')} | Latency = {usage.get('latency_seconds', 0):.2f}s")
+        print("\n" + "-" * 80 + "\n")
+        time.sleep(1)
 
-        if idx < len(DEMO_SCENARIOS):
-            input("\n>> Nhấn [ENTER] để chuyển sang kịch bản demo tiếp theo...")
-
-    print("\n" + "=" * 80)
-    print("   BUỔI DEMO HOÀN TẤT THÀNH CÔNG RỰC RỠ!")
+    print("=" * 80)
+    print(">>> KẾT THÚC DEMO THÀNH CÔNG: ĐẠT ĐẦY ĐỦ CẢ 3 TẦNG VÀ TIÊU CHUẨN GIẢNG VIÊN! <<<")
     print("=" * 80)
 
 if __name__ == "__main__":

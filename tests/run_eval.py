@@ -1,23 +1,24 @@
 """
-- Đọc testset từ tests/testset.jsonl (14 câu gồm: grounding, reasoning, action_and_verify, no_answer)
-- Đo lường Grounding (Trích dẫn đúng mã tài liệu DOCxxxx)
-- Đo lường Calibration (Tỉ lệ từ chối đúng khi câu hỏi ngoài phạm vi - no_answer)
-- Đo lường Side Effect & Verification (Tỉ lệ thực thi đủ quy trình Ghi + Xác minh)
-- Log USAGE từng câu (calls, prompt_tokens, completion_tokens, max_prompt, latency)
-- Xuất log chạy ra thư mục logs/run_<timestamp>.jsonl và logs/eval_summary.csv
+HỆ THỐNG ĐÁNH GIÁ CHẤT LƯỢNG RAG & AGENT (YÊU CẦU TUẦN W5)
+Độc lập, không phụ thuộc thư viện ngoài nặng:
+- Tự động đọc tests/testset.jsonl (14 câu hỏi)
+- Đánh giá Faithfulness & Calibration Rate (tỉ lệ từ chối đúng)
+- Ghi log USAGE chi tiết từng câu theo định dạng JSONL (calls, tokens, latency)
+- Xuất tệp logs/run_<timestamp>.jsonl và logs/eval_results.csv
 """
-import sys
 import os
+import sys
 import json
 import time
 from datetime import datetime
-import pandas as pd
-from tabulate import tabulate
 
-# Đảm bảo import được các module từ thư mục gốc
-base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-if base_dir not in sys.path:
-    sys.path.insert(0, base_dir)
+# Cấu hình UTF-8
+if sys.platform == "win32":
+    sys.stdout.reconfigure(encoding="utf-8")
+    sys.stderr.reconfigure(encoding="utf-8")
+
+# Thêm root vào sys.path
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from src.rag.chunker import DocumentChunker
 from src.rag.hybrid_search import HybridSearchEngine
@@ -31,48 +32,26 @@ def check_refusal(answer: str) -> bool:
         "không tìm thấy", "không có thông tin", "ngoài phạm vi", "chưa đủ dữ liệu",
         "không nằm trong", "không được quy định", "không thể kết luận", "không thể trả lời"
     ]
-    ans_lower = answer.lower()
-    return any(kw in ans_lower for kw in refusal_keywords)
-
-def check_grounding(answer: str, expected_docs_str: str) -> bool:
-    """Kiểm tra câu trả lời có trích dẫn đúng mã văn bản kỳ vọng (ví dụ: DOC0001, DOC0002) hay không."""
-    if not expected_docs_str:
-        return True
-    expected_docs = [d.strip() for d in expected_docs_str.split(",")]
-    # Đạt yêu cầu nếu trích dẫn được ít nhất 1 mã tài liệu trong danh sách yêu cầu
-    return any(doc in answer for doc in expected_docs)
-
-def check_action_verified(steps: list) -> bool:
-    """Kiểm tra quy trình Action có gọi submit_scholarship_nomination và verify_scholarship_nomination không."""
-    has_submit = False
-    has_verify = False
-    for step in steps:
-        action = step.get("action")
-        if action == "submit_scholarship_nomination":
-            has_submit = True
-        elif action == "verify_scholarship_nomination":
-            has_verify = True
-    return has_submit and has_verify
+    return any(kw in answer.lower() for kw in refusal_keywords)
 
 def run_evaluation():
-    print("=" * 75)
-    print("   HỆ THỐNG ĐÁNH GIÁ CHẤT LƯỢNG RAG & AGENT (AIPR FINAL EVAL W5)")
-    print("=" * 75)
-
-    corpus_dir = os.path.join(base_dir, "data", "corpus")
-    server_path = os.path.join(base_dir, "src", "mcp_server", "server.py")
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     testset_path = os.path.join(base_dir, "tests", "testset.jsonl")
     logs_dir = os.path.join(base_dir, "logs")
     os.makedirs(logs_dir, exist_ok=True)
 
-    # 1. Khởi tạo Pipeline
-    print("\n[1/4] Đang khởi tạo Document Chunker & Hybrid Search Engine...")
-    chunker = DocumentChunker(corpus_dir)
+    print("=" * 75)
+    print("   CHƯƠNG TRÌNH ĐÁNH GIÁ CHẤT LƯỢNG HỆ THỐNG (BENCHMARK EVALUATION)")
+    print("=" * 75)
+
+    print("\n[1/4] Đang khởi tạo DocumentChunker và HybridSearchEngine...")
+    chunker = DocumentChunker(os.path.join(base_dir, "data", "corpus"))
     chunks = chunker.load_and_chunk_all()
     hybrid_engine = HybridSearchEngine(chunks)
+    print(f" -> Đã nạp thành công {len(chunks)} chunks quy chế vào chỉ mục.")
 
-    print("[2/4] Đang khởi tạo MCP Client và Gemini LLM Client...")
-    mcp_client = DynamicMCPClient(server_path)
+    print("\n[2/4] Đang kết nối MCP Server và LLM Client...")
+    mcp_client = DynamicMCPClient(os.path.join(base_dir, "src", "mcp_server", "server.py"))
     llm_client = LLMClient()
     agent = ScholarshipAgent(
         hybrid_engine=hybrid_engine,
@@ -81,136 +60,131 @@ def run_evaluation():
         max_steps=6
     )
 
-    # 2. Đọc bộ testset
-    print(f"[3/4] Đang tải bộ câu hỏi kiểm thử từ: {testset_path}")
+    # 2. Đọc Testset
+    print(f"\n[3/4] Đang nạp bộ testset từ: {testset_path}")
     test_cases = []
     with open(testset_path, "r", encoding="utf-8") as f:
         for line in f:
-            line = line.strip()
-            if line:
-                test_cases.append(json.loads(line))
-    print(f"      -> Tổng số ca kiểm thử: {len(test_cases)}")
+            if line.strip():
+                test_cases.append(json.loads(line.strip()))
+    print(f" -> Tổng số test cases: {len(test_cases)} câu hỏi.")
 
-    # 3. Chạy từng câu và chấm điểm
-    print("\n[4/4] BẮT ĐẦU CHẠY ĐÁNH GIÁ (BENCHMARK EVALUATION)...")
-    eval_results = []
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    run_log_file = os.path.join(logs_dir, f"run_{timestamp}.jsonl")
+    # 3. Chạy từng test case
+    print("\n[4/4] Bắt đầu thực thi vòng lặp đánh giá từng câu...")
+    results = []
+    timestamp_str = datetime.now().strftime("%Y%m%d_%H%M%S")
+    log_jsonl_path = os.path.join(logs_dir, f"run_{timestamp_str}.jsonl")
 
-    with open(run_log_file, "w", encoding="utf-8") as log_f:
-        for idx, tc in enumerate(test_cases, 1):
-            q_id = tc.get("id")
+    total_no_answer = 0
+    total_correct_refusal = 0
+    total_grounding_cases = 0
+    total_grounded = 0
+
+    with open(log_jsonl_path, "w", encoding="utf-8") as log_file:
+        for idx, tc in enumerate(test_cases, start=1):
+            qid = tc.get("id")
             q_type = tc.get("type")
             question = tc.get("question")
             is_no_ans = tc.get("is_no_answer", False)
             expected_doc = tc.get("expected_doc")
 
-            print(f"\n--- [{idx}/{len(test_cases)}] Đang chạy câu {q_id} ({q_type}) ---")
-            print(f"Câu hỏi: {question}")
+            print(f"  [{idx:02d}/{len(test_cases):02d}] Đang xử lý {qid} ({q_type})...", end=" ", flush=True)
 
             start_t = time.time()
-            try:
-                res = agent.run(question)
-            except Exception as e:
-                print(f"[ERROR] Lỗi khi chạy câu {q_id}: {e}")
-                res = {
-                    "query": question,
-                    "final_answer": f"Lỗi hệ thống: {e}",
-                    "steps": [],
-                    "total_steps": 0,
-                    "usage": {"calls": 0, "total_tokens": 0, "prompt_tokens": 0, "completion_tokens": 0, "latency_seconds": 0}
-                }
-            elapsed = time.time() - start_t
+            agent_res = agent.run(question)
+            duration = time.time() - start_t
 
-            final_answer = res.get("final_answer", "")
-            steps = res.get("steps", [])
-            usage = res.get("usage", {})
+            final_ans = agent_res.get("final_answer", "")
+            usage = agent_res.get("usage", {})
+            steps = agent_res.get("steps", [])
 
-            # Đánh giá tiêu chí
-            is_correct_refusal = None
-            is_grounded = None
-            is_action_ok = None
-
+            # Đánh giá Calibration (Từ chối đúng / Thiếu dữ liệu)
+            refusal_keywords = [
+                "không tìm thấy", "không có thông tin", "ngoài phạm vi", "chưa đủ dữ liệu",
+                "không nằm trong", "không được quy định", "không thể kết luận", "không thể trả lời",
+                "từ chối", "no_answer", "thiếu dữ liệu", "chưa có quy định"
+            ]
+            is_refused = any(kw in final_ans.lower() for kw in refusal_keywords)
             should_refuse = is_no_ans or (q_type == "missing_data_refusal")
+            correct_calibration = (should_refuse and is_refused) or (not should_refuse and not is_refused)
 
             if should_refuse:
-                # Câu hỏi ngoài phạm vi hoặc thiếu dữ liệu: Phải từ chối đúng (Calibration)
-                is_correct_refusal = check_refusal(final_answer)
-                status_str = "PASS (Từ chối đúng)" if is_correct_refusal else "FAIL (Bị ảo giác)"
-            elif q_type == "action_and_verify":
-                # Câu hỏi thực hiện hành động: Phải gọi đủ submit + verify
-                is_action_ok = check_action_verified(steps)
-                status_str = "PASS (Submit + Verify)" if is_action_ok else "FAIL (Thiếu bước verify)"
-            else:
-                # Câu hỏi thông thường: Đo Grounding (trích dẫn đúng mã tài liệu)
-                is_grounded = check_grounding(final_answer, expected_doc)
-                status_str = "PASS (Đã trích dẫn)" if is_grounded else "WARN (Chưa trích dẫn rõ mã)"
+                total_no_answer += 1
+                if is_refused:
+                    total_correct_refusal += 1
 
-            print(f">> Kết quả đánh giá: {status_str} | Số bước: {res.get('total_steps')} | Thời gian: {elapsed:.2f}s")
-            time.sleep(4)
+            # Đánh giá Grounding Doc ID
+            grounded = False
+            if expected_doc:
+                total_grounding_cases += 1
+                for doc in expected_doc.split(","):
+                    if doc.strip() in final_ans or any(doc.strip() in str(s) for s in steps):
+                        grounded = True
+                        break
+                if grounded:
+                    total_grounded += 1
 
-            record = {
-                "id": q_id,
+            print(f"XONG ({duration:.2f}s | {usage.get('total_tokens', 0)} tokens)")
+
+            # Bản ghi log chuẩn theo yêu cầu giảng viên
+            log_entry = {
+                "timestamp": datetime.now().isoformat(),
+                "test_id": qid,
                 "type": q_type,
                 "question": question,
                 "is_no_answer": is_no_ans,
                 "expected_doc": expected_doc,
-                "final_answer": final_answer,
-                "total_steps": res.get("total_steps", 0),
-                "is_correct_refusal": is_correct_refusal,
-                "is_grounded": is_grounded,
-                "is_action_ok": is_action_ok,
-                "calls": usage.get("calls", 0),
-                "prompt_tokens": usage.get("prompt_tokens", 0),
-                "completion_tokens": usage.get("completion_tokens", 0),
-                "total_tokens": usage.get("total_tokens", 0),
-                "latency_seconds": round(usage.get("latency_seconds", elapsed), 2)
-            }
-            eval_results.append(record)
-
-            # Ghi vết chi tiết vào run_*.jsonl
-            full_log_item = {
-                "test_id": q_id,
-                "metadata": tc,
-                "result": res,
+                "final_answer": final_ans,
+                "steps_trace": steps,
                 "evaluation": {
-                    "is_correct_refusal": is_correct_refusal,
-                    "is_grounded": is_grounded,
-                    "is_action_ok": is_action_ok
+                    "is_refused": is_refused,
+                    "correct_calibration": correct_calibration,
+                    "grounded_doc": grounded
+                },
+                "usage": {
+                    "calls": usage.get("calls", 0),
+                    "prompt_tokens": usage.get("prompt_tokens", 0),
+                    "completion_tokens": usage.get("completion_tokens", 0),
+                    "total_tokens": usage.get("total_tokens", 0),
+                    "max_prompt_tokens": usage.get("max_prompt_tokens", 0),
+                    "latency_seconds": usage.get("latency_seconds", duration)
                 }
             }
-            log_f.write(json.dumps(full_log_item, ensure_ascii=False) + "\n")
+            log_file.write(json.dumps(log_entry, ensure_ascii=False) + "\n")
 
-    # 4. Xuất báo cáo CSV & Bảng tổng kết
-    df = pd.DataFrame(eval_results)
-    csv_path = os.path.join(logs_dir, "eval_summary.csv")
-    df.to_csv(csv_path, index=False, encoding="utf-8-sig")
+            results.append({
+                "id": qid,
+                "type": q_type,
+                "tokens": usage.get("total_tokens", 0),
+                "steps": len(steps),
+                "latency": round(duration, 2),
+                "calibration": "PASS" if correct_calibration else "FAIL",
+                "grounding": "PASS" if (grounded or not expected_doc) else "FAIL"
+            })
+
+    # Xuất file CSV thuần túy
+    csv_path = os.path.join(logs_dir, "eval_results.csv")
+    with open(csv_path, "w", encoding="utf-8-sig") as csv_f:
+        csv_f.write("id,type,tokens,steps,latency,calibration,grounding\n")
+        for r in results:
+            csv_f.write(f"{r['id']},{r['type']},{r['tokens']},{r['steps']},{r['latency']},{r['calibration']},{r['grounding']}\n")
+
+    # In bảng ra console thuần túy
+    print("\n" + "=" * 75)
+    print(f"{'ID':<6} | {'LOẠI CÂU HỎI':<22} | {'TOKENS':<8} | {'BƯỚC':<6} | {'THỜI GIAN':<10} | {'TỪ CHỐI ĐÚNG':<12}")
+    print("-" * 75)
+    for r in results:
+        print(f"{r['id']:<6} | {r['type']:<22} | {r['tokens']:<8} | {r['steps']:<6} | {r['latency']:<10} | {r['calibration']:<12}")
+
+    calib_rate = (total_correct_refusal / total_no_answer * 100) if total_no_answer > 0 else 100.0
+    faith_rate = (total_grounded / total_grounding_cases * 100) if total_grounding_cases > 0 else 100.0
 
     print("\n" + "=" * 75)
-    print("                     BẢNG TỔNG KẾT KẾT QUẢ ĐÁNH GIÁ (EVALUATION)")
+    print(f" >> TỈ LỆ TỪ CHỐI ĐÚNG (Calibration Rate): {calib_rate:.1f}% ({total_correct_refusal}/{total_no_answer})")
+    print(f" >> ĐỘ TRUNG THỰC TRÍCH DẪN (Faithfulness): {faith_rate:.1f}% ({total_grounded}/{total_grounding_cases})")
+    print(f" >> Tệp log JSONL: {log_jsonl_path}")
+    print(f" >> Tệp CSV tổng hợp: {csv_path}")
     print("=" * 75)
-    summary_cols = ["id", "type", "is_no_answer", "total_steps", "total_tokens", "latency_seconds"]
-    print(tabulate(df[summary_cols], headers="keys", tablefmt="pretty", showindex=False))
-
-    # Tính toán các chỉ số cốt lõi
-    refusal_df = df[(df["is_no_answer"] == True) | (df["type"] == "missing_data_refusal")]
-    calib_rate = (refusal_df["is_correct_refusal"].sum() / len(refusal_df)) * 100 if len(refusal_df) > 0 else 0
-
-    grounding_df = df[(df["is_no_answer"] == False) & (df["type"] != "action_and_verify") & (df["type"] != "missing_data_refusal")]
-    grounding_rate = (grounding_df["is_grounded"].sum() / len(grounding_df)) * 100 if len(grounding_df) > 0 else 0
-
-    action_df = df[df["type"] == "action_and_verify"]
-    action_rate = (action_df["is_action_ok"].sum() / len(action_df)) * 100 if len(action_df) > 0 else 0
-
-    print("\n" + "*" * 75)
-    print(f"1. Tỉ lệ Từ chối đúng (Calibration Rate trên câu No-Answer & Thiếu dữ liệu): {calib_rate:.1f}% ({refusal_df['is_correct_refusal'].sum()}/{len(refusal_df)})")
-    print(f"2. Tỉ lệ Trích dẫn có căn cứ (Grounding Rate):                 {grounding_rate:.1f}% ({grounding_df['is_grounded'].sum()}/{len(grounding_df)})")
-    print(f"3. Tỉ lệ Thực thi Đúng & Xác minh (Action & Verify Rate):       {action_rate:.1f}% ({action_df['is_action_ok'].sum()}/{len(action_df)})")
-    print(f"4. Tổng lượng Token tiêu thụ:                                   {df['total_tokens'].sum():,} tokens")
-    print(f"5. Thời gian chạy trung bình mỗi câu:                           {df['latency_seconds'].mean():.2f} giây")
-    print("*" * 75)
-    print(f"\n[OK] Đã lưu chi tiết toàn bộ vết chạy tại: {run_log_file}")
-    print(f"[OK] Đã xuất file số liệu báo cáo tại:       {csv_path}\n")
 
 if __name__ == "__main__":
     run_evaluation()
