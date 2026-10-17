@@ -103,17 +103,17 @@ make test           # Chạy toàn bộ 14 bài unit tests
 
 ## 4. Phân Công Thành Viên & Ma Trận Trách Nhiệm
 
-1. **Thành viên 1: Nguyễn Huy Thái (MSSV: 24110056 - Khoa CNTT)**
+1. **Thành viên 1: Nguyễn Huy Thái (MSSV: 24110133 - GitHub: `@Sthboring` - Khoa FIE)**
    - **Chuyên trách:** RAG Pipeline, Chunker ngữ nghĩa, Tri thức Quy chế, Báo cáo Mục 3.
    - **Mã nguồn phụ trách:** `src/rag/chunker.py`, `src/rag/hybrid_search.py`, `src/rag/retriever_bm25.py`, `src/rag/retriever_dense.py`, `tests/test_rag.py`.
    - **Điểm cộng kỹ thuật (+1đ):** Xây dựng thực nghiệm benchmark so sánh cấu hình Dense (88.9%) vs BM25 (100%) vs Hybrid RRF (100%) tại `scripts/compare_rag_configs.py`.
 
-2. **Thành viên 2: Võ Mạnh Đức Tín (MSSV: 24110137 - Khoa K24 FIE)**
+2. **Thành viên 2: Võ Mạnh Đức Tín (MSSV: 24110137 - GitHub: `@Bevil0301` - Khoa FIE)**
    - **Chuyên trách:** Giao thức MCP Server, Tool Contracts, CSDL Tác vụ, Báo cáo Mục 5.
    - **Mã nguồn phụ trách:** `src/mcp_server/server.py`, `src/mcp_server/tools_contracts.py`, `data/database/`, `tests/test_mcp_server.py`.
    - **Điểm cộng kỹ thuật (+1đ):** Xây dựng Standalone MCP Server chuẩn giao thức Stdio (5 tools, stdout sạch) và Client thứ hai kiểm toán độc lập `scripts/external_auditor_client.py` minh chứng tính Interoperability.
 
-3. **Thành viên 3: Nguyễn Minh Thành (MSSV: 24110088 - Khoa CNTT)**
+3. **Thành viên 3: Nguyễn Minh Thành (MSSV: 24110132 - GitHub: `@taphoclaptrinh` - Khoa FIE)**
    - **Chuyên trách:** Agent Core Loop, Safe Action Parser, Benchmark Evaluation, Báo cáo Mục 2, 4, 6.
    - **Mã nguồn phụ trách:** `src/agent/loop.py`, `src/agent/safe_parser.py`, `src/core/llm_client.py`, `tests/run_eval.py`, `main.py`.
    - **Hạng mục kỹ thuật:** Xây dựng vòng lặp ReAct độc lập không dùng thư viện đen, cơ chế kiểm soát MAX_STEPS, parser bóc tách Action chống crash JSON, testset 14 câu đo lường độ trung thực (Faithfulness) và hiệu chỉnh từ chối (Calibration Rate).
