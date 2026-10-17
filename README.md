@@ -1,5 +1,5 @@
 # ENCOURAGEMENT SCHOLARSHIP ANALYST RAG & AGENT
-> **Đồ án Cuối kỳ Môn học AIPR (Tuần W1 – W7)**  
+> **Đồ án Cuối kỳ Môn học AIPR**  
 > **Đề tài:** Hệ thống Trợ lý Phân tích và Thẩm định Học bổng Khuyến khích Học tập  
 > **Kiến trúc:** RAG Đa chế độ (Dense + BM25 Hybrid Search + Metadata Filtering) + Agent Loop tự viết + MCP Server (Stdio) + Đo lường USAGE
 ---
@@ -27,10 +27,10 @@ python -m scripts.demo_runner
 # Bước 3: Tái lập Bảng Đánh Giá Benchmark (14 câu testset, đo Calibration & Faithfulness)
 python -m tests.run_eval
 
-# Bước 4: So sánh cấu hình RAG: Dense vs BM25 vs Hybrid RRF (+1 Điểm cộng RAG)
+# Bước 4: So sánh cấu hình RAG: Dense vs BM25 vs Hybrid RRF 
 python scripts/compare_rag_configs.py
 
-# Bước 5: Chạy Client kiểm toán độc lập kiểm thử MCP Server (+1 Điểm cộng MCP)
+# Bước 5: Chạy Client kiểm toán độc lập kiểm thử MCP Server 
 python -m scripts.external_auditor_client
 
 # Bước 6: Chạy toàn bộ 14 unit tests kiểm thử độc lập RAG Pipeline & MCP Server
@@ -48,8 +48,8 @@ python main.py
 make setup          # Cài đặt thư viện & tự copy .env
 make demo           # Chạy live demo kịch bản 3 tầng
 make eval           # Chạy benchmark 14 câu và vẽ đồ thị
-make compare-rag    # Benchmark so sánh Dense vs BM25 vs Hybrid Search (+1đ RAG)
-make audit          # Client thứ hai kiểm toán độc lập MCP Server (+1đ MCP)
+make compare-rag    # Benchmark so sánh Dense vs BM25 vs Hybrid Search 
+make audit          # Client thứ hai kiểm toán độc lập MCP Server 
 make test           # Chạy toàn bộ 14 bài unit tests
 ```
 
