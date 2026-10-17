@@ -1,0 +1,46 @@
+---
+doc_id: DOC0006
+title: Thông báo số 789/TB-ĐHCNKT về việc xét cấp Học bổng Khuyến khích học tập học kỳ II năm học 2025-2026
+date: 2026-03-16
+version: 3.0 (Văn bản mới nhất đang áp dụng)
+owner: Phòng Tuyển sinh và Công tác Sinh viên (P.CTSV)
+status: ACTIVE_CURRENT
+faculty_scope: ALL (Toàn trường, chi tiết khoa CNTT và viện FIE)
+---
+
+THÔNG BÁO VỀ VIỆC XÉT CẤP HỌC BỔNG KHUYẾN KHÍCH HỌC TẬP HỌC KỲ II NĂM HỌC 2025-2026 (Số: 789/TB-ĐHCNKT)
+
+Điều 1. Đối tượng và điều kiện tiên quyết
+1. Sinh viên hệ chính quy đang học đúng tiến độ, bao gồm các khóa K23, K24, K25, K26.
+2. Tổng số tín chỉ các học phần học lần đầu trong học kỳ xét từ 15 tín chỉ trở lên. Không tính các học phần trả nợ, cải thiện, ngoài CTĐT, Giáo dục thể chất, Giáo dục quốc phòng và Kỹ năng giao tiếp tiếng Anh 1, 2.
+3. Điểm trung bình xét học bổng (ĐTBXHB) từ 7.0 trở lên (thang điểm 10) hoặc từ 2.80 trở lên (thang điểm 4).
+4. Điểm rèn luyện (ĐRL) từ 70 điểm trở lên (thang điểm 100). Bắt buộc phải có cả 2 chỉ số GPA và ĐRL. Nếu thiếu dữ liệu sẽ bị từ chối xét duyệt và yêu cầu bổ sung.
+5. Không có điểm tổng kết dưới 5.0 (tương đương không có môn bị điểm F).
+6. Không bị kỷ luật từ mức Khiển trách trở lên trong học kỳ xét học bổng.
+
+Điều 2. Khung phân loại học bổng chính thức
+1. Mức loại A (Xuất sắc):
+- ĐTBXHB >= 9.0 (thang 10) hoặc GPA >= 3.60 (thang 4).
+- Điểm rèn luyện >= 90 điểm (loại Xuất sắc).
+- Định mức: Bằng 1.3 lần mức học bổng loại C (Khá), tương đương 125% - 130% học phí chuẩn.
+2. Mức loại B (Giỏi):
+- ĐTBXHB >= 8.0 (thang 10) hoặc GPA >= 3.20 (thang 4).
+- Điểm rèn luyện >= 80 điểm (loại Tốt).
+- Định mức: Bằng 1.15 lần mức học bổng loại C (Khá), tương đương 110% - 115% học phí chuẩn.
+3. Mức loại C (Khá):
+- ĐTBXHB >= 7.0 (thang 10) hoặc GPA >= 2.80 (thang 4).
+- Điểm rèn luyện >= 70 điểm (loại Khá).
+- Định mức: 100% học phí chuẩn của học kỳ.
+
+Điều 3. Nguyên tắc xếp loại và thứ tự ưu tiên
+1. Nguyên tắc Cận dưới: Nếu GPA và ĐRL rơi vào hai mức khác nhau, loại học bổng được quyết định theo tiêu chí đạt mức thấp hơn (Ví dụ: GPA Xuất sắc nhưng ĐRL Khá -> Xếp loại Khá).
+2. Thứ tự ưu tiên xét cấp khi nguồn quỹ có hạn:
+- Ưu tiên 1: Phân loại học bổng từ loại A đến C.
+- Ưu tiên 2: Trong cùng loại học bổng, ưu tiên ĐTBXHB từ cao xuống thấp.
+- Ưu tiên 3: Cùng điểm học tập, ưu tiên Điểm rèn luyện từ cao xuống thấp.
+- Ưu tiên 4: Cùng điểm rèn luyện, ưu tiên số tín chỉ tích lũy trong kỳ từ nhiều đến ít.
+- Ưu tiên 5: Xét ưu tiên sinh viên có giải thưởng Nghiên cứu khoa học (NCKH) cấp trường trở lên.
+
+Điều 4. Quy trình đề cử và xác minh bắt buộc
+- Chuyên viên hoặc Trợ lý Agent sau khi thẩm định đủ điều kiện phải kích hoạt công cụ ghi nhận mã đề cử (submit_scholarship_nomination).
+- Ngay sau khi ghi nhận, hệ thống bắt buộc kích hoạt công cụ đọc kiểm chứng (verify_scholarship_nomination) để xác nhận trạng thái VERIFIED trước khi công bố kết quả.
