@@ -1,0 +1,51 @@
+﻿id,type,question,is_no_answer,expected_doc,final_answer,total_steps,is_correct_refusal,is_grounded,is_action_ok,calls,prompt_tokens,completion_tokens,total_tokens,latency_seconds
+Q01,grounding,Quy chế học bổng mới nhất năm 2024 quy định sinh viên cần hoàn thành tối thiểu bao nhiêu tín chỉ trong học kỳ chính để được xét học bổng?,False,DOC0002,"Theo Quy chế Xét cấp Học bổng Khuyến khích học tập năm 2024 phiên bản 2.0 ([DOC0002], Điều 1), sinh viên cần đăng ký và hoàn thành tối thiểu **15 tín chỉ** trong học kỳ chính để đủ điều kiện xét học bổng (tăng từ 14 tín chỉ của năm 2023). Các học phần học lại, cải thiện sẽ không được tính vào số tín chỉ xét học bổng này.",2,,True,,2,4114,264,4378,3.09
+Q02,grounding,Mức học bổng loại Xuất sắc theo quyết định năm 2024 hỗ trợ bao nhiêu phần trăm học phí?,False,DOC0002,"Theo [DOC0002] Quy chế Xét cấp Học bổng Khuyến khích học tập năm 2024 (Điều 2), mức học bổng loại Xuất sắc được hỗ trợ định mức là **125% mức học phí học kỳ**.",2,,True,,2,4305,222,4527,2.84
+Q03,multi_doc_compare,So sánh quy định về số tín chỉ tối thiểu để xét học bổng giữa quy chế năm 2023 và quy chế sửa đổi năm 2024?,False,"DOC0001, DOC0002","So sánh quy định về số tín chỉ tối thiểu để xét học bổng giữa quy chế năm 2023 và quy chế sửa đổi năm 2024 như sau:
+
+1. **Quy chế năm 2023 ([DOC0001] - Điều 1):**
+   - Số tín chỉ tích lũy tối thiểu trong học kỳ xét học bổng là **14 tín chỉ** (không tính các học phần Giáo dục thể chất và Giáo dục quốc phòng).
+
+2. **Quy chế sửa đổi năm 2024 ([DOC0002] - Điều 1):**
+   - Số tín chỉ tối thiểu đã được tăng lên thành **15 tín chỉ** trong học kỳ chính.
+   - Bổ sung quy định rõ ràng rằng các học phần học lại, cải thiện sẽ không được tính vào số tín chỉ xét học bổng.",3,,True,,3,7269,1101,8370,4.87
+Q04,reasoning_floor,Sinh viên có GPA 3.75 và Điểm rèn luyện 82 điểm thì được xếp loại học bổng nào theo quy chế 2024?,False,DOC0002,"Theo [DOC0002] Quy chế Xét cấp Học bổng Khuyến khích học tập năm 2024 (Điều 2 và Điều 3), sinh viên có GPA 3.75 (thuộc mức Xuất sắc) và Điểm rèn luyện 82 điểm (thuộc mức Giỏi) sẽ áp dụng **Nguyên tắc cận dưới** (lấy mức thấp hơn). Do đó, sinh viên này được xếp loại học bổng **Giỏi** với định mức 110% mức học phí học kỳ.",2,,True,,2,4326,408,4734,2.67
+Q05,reasoning_disqualify,"Sinh viên có GPA 3.90, ĐRL 95 nhưng chỉ đăng ký 13 tín chỉ trong kỳ chính thì có đủ điều kiện nhận học bổng không?",False,DOC0002,"Theo [DOC0002] Quy chế Xét cấp Học bổng Khuyến khích học tập năm 2024 (Phiên bản 2.0, Điều 1), sinh viên phải đăng ký và hoàn thành tối thiểu 15 tín chỉ trong học kỳ chính. Vì sinh viên trong trường hợp này chỉ đăng ký 13 tín chỉ (không đạt điều kiện tiên quyết), sinh viên **không đủ điều kiện** nhận học bổng khuyến khích học tập.",2,,True,,2,4116,303,4419,2.98
+Q06,reasoning_discipline,"Sinh viên có GPA 3.65, ĐRL 91 nhưng bị Cảnh cáo học vụ mức 1 thì có được xét học bổng không?",False,"DOC0002, DOC0003","Theo [DOC0002] Quy chế Xét cấp Học bổng Khuyến khích học tập năm 2024 (Điều 1, Khoản 3), sinh viên bị cảnh cáo học vụ mức 1 sẽ không đủ điều kiện xét học bổng. Quy chế quy định rõ sinh viên phải ""Không bị bất kỳ hình thức kỷ luật nào (kể cả Phê bình, Khiển trách, Cảnh cáo học vụ mức 1/2/3)"". Do đó, dù sinh viên đạt GPA 3.65 và ĐRL 91, trường hợp này vẫn không được xét học bổng.",2,,True,,2,3780,337,4117,2.74
+Q07,missing_data_refusal,Xét học bổng cho sinh viên Vũ Thùy Dương (25110305) dựa trên kết quả hiện tại.,False,DOC0002,Chưa đủ dữ liệu để xét học bổng vì sinh viên Vũ Thùy Dương (25110305) chưa có điểm rèn luyện (ĐRL hiện tại là chưa có/null).,2,True,,,2,3574,230,3804,2.44
+Q08,action_and_verify,"Hãy kiểm tra hồ sơ sinh viên Nguyễn Hoàng Nam (23110101), nếu đủ điều kiện loại Xuất sắc hãy nộp đơn đề cử học bổng và xác minh.",False,DOC0002,"Dựa trên kết quả tra cứu hồ sơ và quy chế học bổng hiện hành [DOC0002], sinh viên **Nguyễn Hoàng Nam** (Mã sinh viên: **23110101**) hoàn toàn đủ điều kiện xét học bổng khuyến khích học tập loại **Xuất sắc**.
+
+**1. Chi tiết kết quả kiểm tra điều kiện tiên quyết và tiêu chí [DOC0002]:**
+- **Số tín chỉ đăng ký/hoàn thành:** 18 tín chỉ (Đáp ứng điều kiện $\ge 15$ tín chỉ theo Điều 1, [DOC0002]).
+- **Điểm học tập và rèn luyện:** 
+  - GPA: **3.88** (Thuộc khung Xuất sắc từ 3.60 - 4.00 theo Điều 2, [DOC0002]).
+  - ĐRL: **95** (Thuộc khung Xuất sắc từ 90 - 100 điểm theo Điều 2, [DOC0002]).
+- **Tình trạng học tập:** Không có môn rớt (`has_failed_course: false`, Điều 1, [DOC0002]).
+- **Kỷ luật:** Không có kỷ luật (`disciplinary_record: null`, Điều 1, [DOC0002]).
+- **Dữ liệu:** Đầy đủ cả GPA và ĐRL.
+
+**2. Kết quả nộp đơn đề cử và xác minh:**
+Hệ thống đã tự động thực hiện việc lập hồ sơ đề cử học bổng loại Xuất sắc và tiến hành xác minh thành công:
+- **Mã biên nhận đề cử (`nomination_id`):** `NOM_20261017_33F994`
+- **Trạng thái hệ thống:** `VERIFIED` (Đã được lưu trữ và kiểm chứng hợp lệ trong cơ sở dữ liệu).",5,,,True,5,12456,1304,13760,8.21
+Q09,action_and_verify,Thẩm định và đề cử học bổng cho sinh viên Trần Thị Mai Phương (23110102).,False,DOC0002,"Kết quả thẩm định và đề cử học bổng Khuyến khích học tập cho sinh viên Trần Thị Mai Phương (Mã sinh viên: 23110102):
+
+1. **Kết quả kiểm tra điều kiện tiên quyết (theo [DOC0002]):**
+   - Số tín chỉ đăng ký/hoàn thành: 16 tín chỉ (đạt điều kiện tối thiểu $\ge 15$ tín chỉ).
+   - Tình trạng học tập: Không có môn rớt (`has_failed_course: false`).
+   - Kỷ luật: Không có kỷ luật (`disciplinary_record: null`).
+   - Kết quả học tập và rèn luyện: GPA đạt 3.72 (Mức Xuất sắc) và Điểm rèn luyện ĐRL đạt 84 (Mức Giỏi). 
+
+2. **Áp dụng Nguyên tắc xếp loại:**
+   - Theo **Điều 3 [DOC0002]** (Nguyên tắc cận dưới khi GPA và ĐRL rơi vào hai mức khác nhau), sinh viên được xếp loại học bổng theo tiêu chí thấp hơn. Do GPA đạt mức Xuất sắc nhưng ĐRL đạt mức Giỏi, sinh viên được xếp loại **Giỏi**.
+
+3. **Trạng thái Đề cử & Xác minh:**
+   - Hồ sơ đã được tạo thành công với mã đề cử: `NOM_20261017_C8714A`.
+   - Hệ thống đã tự động kiểm tra và xác thực (`VERIFIED`) trong cơ sở dữ liệu học bổng năm 2024 [DOC0002]. 
+
+Sinh viên Trần Thị Mai Phương đã chính thức được ghi nhận đạt điều kiện và đề cử nhận học bổng Khuyến khích học tập loại **Giỏi**.",4,,,True,4,9254,1203,10457,5.9
+Q10,no_answer,Học bổng tài trợ của Tập đoàn Vingroup dành cho sinh viên xuất sắc trị giá bao nhiêu tiền một tháng?,True,,Không tìm thấy thông tin trong cơ sở dữ liệu quy chế hiện tại về mức tiền của học bổng tài trợ từ Tập đoàn Vingroup [DOC0004]. Các quỹ học bổng doanh nghiệp nằm ngoài phạm vi quản lý và xét duyệt của học bổng khuyến khích học tập theo quy định của nhà trường [DOC0004].,2,True,,,2,3970,309,4279,33.87
+Q11,no_answer,Sinh viên học vượt 20 tín chỉ trong học kỳ hè có được nhân đôi tiền thưởng học bổng khuyến khích không?,True,,"Không tìm thấy thông tin hoặc quy định về việc nhân đôi tiền thưởng học bổng khuyến khích học tập cho các tín chỉ học vượt trong học kỳ hè. Theo [DOC0003] Quy chế Đào tạo Trình độ Đại học theo Hệ thống Tín chỉ (Điều 15, khoản 3), các tín chỉ học trong kỳ hè không được xét tính cho học bổng khuyến khích học tập học kỳ chính.",2,True,,,2,3983,363,4346,2.17
+Q12,no_answer,Chính sách học bổng trao đổi sinh viên tại Đại học Tokyo Nhật Bản của trường gồm những tiêu chí gì?,True,,Không tìm thấy thông tin trong cơ sở dữ liệu quy chế hiện tại.,1,True,,,1,1710,117,1827,0.86
+Q13,no_answer,Mức định mức học bổng khuyến khích học tập dự kiến áp dụng cho năm học 2026-2027 là bao nhiêu?,True,,Không tìm thấy thông tin về mức định mức học bổng khuyến khích học tập cho năm học 2026-2027 trong cơ sở dữ liệu quy chế hiện tại.,2,True,,,2,4385,260,4645,2.7
+Q14,no_answer,Sinh viên bị trừ điểm rèn luyện do vi phạm an toàn giao thông ngoài trường có được bảo lưu kết quả học bổng không?,True,,"Không tìm thấy thông tin trong cơ sở dữ liệu quy chế hiện tại [DOC0002, DOC0005] về việc bảo lưu kết quả học bổng đối với trường hợp sinh viên vi phạm an toàn giao thông.",2,True,,,2,3901,257,4158,2.54

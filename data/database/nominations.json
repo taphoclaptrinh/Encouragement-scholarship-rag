@@ -141,5 +141,82 @@
     "reason": "GPA 3.72 và ĐRL 84",
     "created_at": "2026-10-12T15:56:32.093693",
     "verified_at": "2026-10-12T15:56:32.095508"
+  },
+  {
+    "nomination_id": "NOM_20261017_81CEAC",
+    "student_id": "23110102",
+    "student_name": "Trần Thị Mai Phương",
+    "faculty": "CNTT",
+    "scholarship_tier": "Giỏi",
+    "status": "VERIFIED",
+    "reason": "Đạt GPA 3.72 (Xuất sắc) và ĐRL 84 (Giỏi). Theo nguyên tắc cận dưới tại Điều 3 [DOC0002], sinh viên đạt học bổng loại Giỏi. Thỏa mãn đầy đủ các điều kiện tiên quyết.",
+    "created_at": "2026-10-17T22:26:28.016901",
+    "verified_at": "2026-10-17T22:26:28.036140"
+  },
+  {
+    "nomination_id": "NOM_20261017_4FF6BE",
+    "student_id": "23110102",
+    "student_name": "Trần Thị Mai Phương",
+    "faculty": "CNTT",
+    "scholarship_tier": "Giỏi",
+    "status": "VERIFIED",
+    "reason": "GPA đạt 3.72 (Xuất sắc) và ĐRL đạt 84 (Giỏi), áp dụng nguyên tắc cận dưới xét loại Giỏi theo Điều 3 [DOC0002]. Đạt đủ các điều kiện tiên quyết tại Điều 1 [DOC0002].",
+    "created_at": "2026-10-17T22:45:13.082054",
+    "verified_at": "2026-10-17T22:45:13.098720"
+  },
+  {
+    "nomination_id": "NOM_20261017_E72674",
+    "student_id": "23110101",
+    "student_name": "Nguyễn Hoàng Nam",
+    "faculty": "CNTT",
+    "scholarship_tier": "Xuất sắc",
+    "status": "VERIFIED",
+    "reason": "Đạt GPA 3.88, ĐRL 95, hoàn thành 18 tín chỉ, không vi phạm quy chế và không rớt môn.",
+    "created_at": "2026-10-17T23:00:57.049148",
+    "verified_at": "2026-10-17T23:00:57.068366"
+  },
+  {
+    "nomination_id": "NOM_20261017_FAD521",
+    "student_id": "23110102",
+    "student_name": "Trần Thị Mai Phương",
+    "faculty": "CNTT",
+    "scholarship_tier": "Giỏi",
+    "status": "VERIFIED",
+    "reason": "Sinh viên đạt GPA 3.72 (Xuất sắc) và ĐRL 84 (Giỏi), thỏa mãn mọi điều kiện tiên quyết. Theo nguyên tắc cận dưới, xét học bổng loại Giỏi theo [DOC0002].",
+    "created_at": "2026-10-17T23:01:34.858598",
+    "verified_at": "2026-10-17T23:01:34.890416"
+  },
+  {
+    "nomination_id": "NOM_20261017_6FDCA7",
+    "student_id": "23110102",
+    "student_name": "Trần Thị Mai Phương",
+    "faculty": "CNTT",
+    "scholarship_tier": "Encouragement",
+    "status": "VERIFIED",
+    "reason": "Sinh viên đã đăng ký và hoàn thành 16 tín chỉ, không rớt môn, không có kỷ luật và có điểm rèn luyện 84.",
+    "created_at": "2026-10-17T23:07:11.512031",
+    "verified_at": "2026-10-17T23:07:11.599284"
+  },
+  {
+    "nomination_id": "NOM_20261017_33F994",
+    "student_id": "23110101",
+    "student_name": "Nguyễn Hoàng Nam",
+    "faculty": "CNTT",
+    "scholarship_tier": "Xuất sắc",
+    "status": "VERIFIED",
+    "reason": "Sinh viên đạt GPA 3.88, ĐRL 95, hoàn thành 18 tín chỉ, không vi phạm kỷ luật và không nợ môn, đủ điều kiện nhận học bổng loại Xuất sắc theo [DOC0002]",
+    "created_at": "2026-10-17T23:15:35.031593",
+    "verified_at": "2026-10-17T23:15:35.082780"
+  },
+  {
+    "nomination_id": "NOM_20261017_C8714A",
+    "student_id": "23110102",
+    "student_name": "Trần Thị Mai Phương",
+    "faculty": "CNTT",
+    "scholarship_tier": "Giỏi",
+    "status": "VERIFIED",
+    "reason": "GPA 3.72 (Xuất sắc) và ĐRL 84 (Giỏi), áp dụng nguyên tắc cận dưới xếp loại Giỏi. Thỏa mãn các điều kiện tín chỉ, không rớt môn và không kỷ luật theo [DOC0002].",
+    "created_at": "2026-10-17T23:15:46.004954",
+    "verified_at": "2026-10-17T23:15:46.023072"
   }
 ]

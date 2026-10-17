@@ -131,8 +131,10 @@ def run_evaluation():
             is_grounded = None
             is_action_ok = None
 
-            if is_no_ans:
-                # Câu hỏi ngoài phạm vi: Phải từ chối đúng (Calibration)
+            should_refuse = is_no_ans or (q_type == "missing_data_refusal")
+
+            if should_refuse:
+                # Câu hỏi ngoài phạm vi hoặc thiếu dữ liệu: Phải từ chối đúng (Calibration)
                 is_correct_refusal = check_refusal(final_answer)
                 status_str = "PASS (Từ chối đúng)" if is_correct_refusal else "FAIL (Bị ảo giác)"
             elif q_type == "action_and_verify":
@@ -145,6 +147,7 @@ def run_evaluation():
                 status_str = "PASS (Đã trích dẫn)" if is_grounded else "WARN (Chưa trích dẫn rõ mã)"
 
             print(f">> Kết quả đánh giá: {status_str} | Số bước: {res.get('total_steps')} | Thời gian: {elapsed:.2f}s")
+            time.sleep(4)
 
             record = {
                 "id": q_id,
@@ -190,17 +193,17 @@ def run_evaluation():
     print(tabulate(df[summary_cols], headers="keys", tablefmt="pretty", showindex=False))
 
     # Tính toán các chỉ số cốt lõi
-    no_ans_df = df[df["is_no_answer"] == True]
-    calib_rate = (no_ans_df["is_correct_refusal"].sum() / len(no_ans_df)) * 100 if len(no_ans_df) > 0 else 0
+    refusal_df = df[(df["is_no_answer"] == True) | (df["type"] == "missing_data_refusal")]
+    calib_rate = (refusal_df["is_correct_refusal"].sum() / len(refusal_df)) * 100 if len(refusal_df) > 0 else 0
 
-    grounding_df = df[(df["is_no_answer"] == False) & (df["type"] != "action_and_verify")]
+    grounding_df = df[(df["is_no_answer"] == False) & (df["type"] != "action_and_verify") & (df["type"] != "missing_data_refusal")]
     grounding_rate = (grounding_df["is_grounded"].sum() / len(grounding_df)) * 100 if len(grounding_df) > 0 else 0
 
     action_df = df[df["type"] == "action_and_verify"]
     action_rate = (action_df["is_action_ok"].sum() / len(action_df)) * 100 if len(action_df) > 0 else 0
 
     print("\n" + "*" * 75)
-    print(f"1. Tỉ lệ Từ chối đúng (Calibration Rate trên câu No-Answer): {calib_rate:.1f}% ({no_ans_df['is_correct_refusal'].sum()}/{len(no_ans_df)})")
+    print(f"1. Tỉ lệ Từ chối đúng (Calibration Rate trên câu No-Answer & Thiếu dữ liệu): {calib_rate:.1f}% ({refusal_df['is_correct_refusal'].sum()}/{len(refusal_df)})")
     print(f"2. Tỉ lệ Trích dẫn có căn cứ (Grounding Rate):                 {grounding_rate:.1f}% ({grounding_df['is_grounded'].sum()}/{len(grounding_df)})")
     print(f"3. Tỉ lệ Thực thi Đúng & Xác minh (Action & Verify Rate):       {action_rate:.1f}% ({action_df['is_action_ok'].sum()}/{len(action_df)})")
     print(f"4. Tổng lượng Token tiêu thụ:                                   {df['total_tokens'].sum():,} tokens")
