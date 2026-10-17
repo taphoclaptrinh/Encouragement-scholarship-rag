@@ -1,8 +1,7 @@
 # ENCOURAGEMENT SCHOLARSHIP ANALYST RAG & AGENT
 > **Đồ án Cuối kỳ Môn học AIPR (Tuần W1 – W7)**  
 > **Đề tài:** Hệ thống Trợ lý Phân tích và Thẩm định Học bổng Khuyến khích Học tập  
-> **Kiến trúc:** RAG Đa chế độ (Dense + BM25) + Agent Loop tự viết + MCP Server (Stdio) + Đo lường USAGE  
-
+> **Kiến trúc:** RAG Đa chế độ (Dense + BM25 Hybrid Search + Metadata Filtering) + Agent Loop tự viết + MCP Server (Stdio) + Đo lường USAGE
 ---
 
 ## 1. Hướng Dẫn Chạy Nhanh (Dành cho Giảng Viên)
@@ -39,8 +38,9 @@ make eval
 
 ---
 
-## 3. Cấu Trúc Dự Án 
+## 3. Cấu Trúc Dự Án
 
+```text
 ├── data/                  # Tài liệu quy chế có metadata (doc_id, version, owner)
 ├── prompts/               # Prompt templates tách biệt khỏi code (.txt)
 ├── logs/                  # Logs các lần chạy thật (.jsonl) kèm USAGE tokens
@@ -51,10 +51,12 @@ make eval
 │   ├── agent/             # Agent loop (ReAct, Safe Action Parser, Max steps)
 │   └── mcp_server/        # MCP server (Stdio, Dataclass tools, Side-effect)
 ├── tests/
-│   └── testset.jsonl      # Testset chuẩn (≥12 câu hỏi, ≥4 câu no_answer)
+│   ├── testset.jsonl      # Testset chuẩn (≥12 câu hỏi, ≥4 câu no_answer)
+│   └── test_mcp_server.py # Unit tests kiểm thử tự động MCP Server & Client
 ├── ai-usage.md            # Báo cáo minh bạch sử dụng AI theo quy định
 ├── Makefile               # Điều khiển setup, demo, eval
 └── requirements.txt       # Danh sách thư viện phụ thuộc
+```
 
 ## 4. Phân Công Thành Viên & Ma Trận Trách Nhiệm
 
