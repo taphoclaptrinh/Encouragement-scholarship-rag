@@ -1,7 +1,7 @@
 [
   {
     "student_id": "23110101",
-    "full_name": "Nguyễn Hoàng Nam",
+    "full_name": "Nguyễn Văn An",
     "faculty": "CNTT",
     "cohort": "K23",
     "semester": "HK1-2025-2026",
@@ -14,7 +14,7 @@
   },
   {
     "student_id": "23110102",
-    "full_name": "Trần Thị Mai Phương",
+    "full_name": "Trần Thị Bình",
     "faculty": "CNTT",
     "cohort": "K23",
     "semester": "HK1-2025-2026",
@@ -53,7 +53,7 @@
   },
   {
     "student_id": "25110305",
-    "full_name": "Vũ Thùy Dương",
+    "full_name": "Vũ Thu Dung",
     "faculty": "FIE",
     "cohort": "K25",
     "semester": "HK1-2025-2026",

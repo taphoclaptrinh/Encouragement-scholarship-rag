@@ -34,8 +34,24 @@ class DynamicMCPClient:
             return []
 
         try:
-            # 1. Hỗ trợ chuẩn MCP 2.x (async list_tools)
-            if hasattr(self._server_instance, "list_tools"):
+            # 1. Ưu tiên khám phá đồng bộ qua _tool_manager (loại bỏ hoàn toàn lỗi event loop trên Windows)
+            tool_dict = {}
+            if hasattr(self._server_instance, "_tool_manager") and hasattr(self._server_instance._tool_manager, "_tools"):
+                tool_dict = self._server_instance._tool_manager._tools
+            elif hasattr(self._server_instance, "_tools"):
+                tool_dict = self._server_instance._tools
+
+            if tool_dict:
+                for tool_name, tool_obj in tool_dict.items():
+                    desc = getattr(tool_obj, "description", None) or getattr(tool_obj, "__doc__", "") or ""
+                    params = getattr(tool_obj, "parameters", {})
+                    tools.append({
+                        "name": tool_name,
+                        "description": desc.strip(),
+                        "parameters": params
+                    })
+            # 2. Hỗ trợ chuẩn MCP 2.x (async list_tools) nếu không có _tool_manager
+            elif hasattr(self._server_instance, "list_tools"):
                 async def _fetch():
                     raw = await self._server_instance.list_tools()
                     res = []
@@ -47,22 +63,6 @@ class DynamicMCPClient:
                         })
                     return res
                 tools = asyncio.run(_fetch())
-            # 2. Hỗ trợ FastMCP 1.x / SimpleMock
-            else:
-                tool_dict = {}
-                if hasattr(self._server_instance, "_tool_manager") and hasattr(self._server_instance._tool_manager, "_tools"):
-                    tool_dict = self._server_instance._tool_manager._tools
-                elif hasattr(self._server_instance, "_tools"):
-                    tool_dict = self._server_instance._tools
-
-                for tool_name, tool_obj in tool_dict.items():
-                    desc = getattr(tool_obj, "description", None) or getattr(tool_obj, "__doc__", "") or ""
-                    params = getattr(tool_obj, "parameters", {})
-                    tools.append({
-                        "name": tool_name,
-                        "description": desc.strip(),
-                        "parameters": params
-                    })
 
             self._tools_cache = tools
             logger.info(f"Đã khám phá động thành công {len(tools)} tools từ MCP Server.")
@@ -80,16 +80,7 @@ class DynamicMCPClient:
             return "Error: MCP Server chưa sẵn sàng hoặc kết nối bị lỗi."
 
         try:
-            # 1. Hỗ trợ chuẩn MCP 2.x (async call_tool)
-            if hasattr(self._server_instance, "call_tool"):
-                async def _invoke():
-                    res = await self._server_instance.call_tool(tool_name, arguments)
-                    if hasattr(res, "content") and res.content:
-                        return res.content[0].text
-                    return str(res)
-                return asyncio.run(_invoke())
-
-            # 2. Fallback gọi trực tiếp hàm Python
+            # 1. Ưu tiên gọi hàm Python đồng bộ qua _tool_manager (An toàn tuyệt đối trên Windows)
             tool_fn = None
             if hasattr(self._server_instance, "_tool_manager") and hasattr(self._server_instance._tool_manager, "_tools"):
                 t_obj = self._server_instance._tool_manager._tools.get(tool_name)
@@ -100,11 +91,20 @@ class DynamicMCPClient:
                 if t_obj:
                     tool_fn = getattr(t_obj, "fn", t_obj)
 
-            if not tool_fn:
-                return f"Error: Tool '{tool_name}' không tồn tại trên MCP Server."
+            if tool_fn:
+                result = tool_fn(**arguments)
+                return str(result)
 
-            result = tool_fn(**arguments)
-            return str(result)
+            # 2. Hỗ trợ chuẩn MCP 2.x (async call_tool) nếu không có _tool_manager
+            if hasattr(self._server_instance, "call_tool"):
+                async def _invoke():
+                    res = await self._server_instance.call_tool(tool_name, arguments)
+                    if hasattr(res, "content") and res.content:
+                        return res.content[0].text
+                    return str(res)
+                return asyncio.run(_invoke())
+
+            return f"Error: Tool '{tool_name}' không tồn tại trên MCP Server."
 
         except TypeError as te:
             logger.warning(f"Lỗi tham số khi gọi tool '{tool_name}': {te}")

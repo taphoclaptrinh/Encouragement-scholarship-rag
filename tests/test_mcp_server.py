@@ -33,7 +33,7 @@ class TestMCPServerAndClient(unittest.TestCase):
         raw = get_student_academic_record("23110101")
         data = json.loads(raw)
         self.assertEqual(data["student_id"], "23110101")
-        self.assertEqual(data["full_name"], "Nguyễn Hoàng Nam")
+        self.assertEqual(data["full_name"], "Nguyễn Văn An")
         self.assertAlmostEqual(data["gpa"], 3.88)
         self.assertEqual(data["drl"], 95)
 

@@ -97,9 +97,18 @@ class LLMClient:
                 return response.text or "", prompt_tokens, completion_tokens, latency
             except Exception as e:
                 last_error = e
-                #Cong thuc : wait_time = 2^attempt * 0.5
-                wait_time = (2 ** attempt) * 0.5
-                logger.error(f"[HTTP/API Error] Lần thử {attempt}/{self.max_retries} thất bại: {e}. Đang đợi {wait_time}s...")
+                err_str = str(e)
+                wait_time = (2 ** attempt) * 1.0
+                if "429" in err_str or "RESOURCE_EXHAUSTED" in err_str:
+                    import re
+                    # Bắt số giây Google yêu cầu đợi (ví dụ: 'retryDelay': '28s' hoặc 'Please retry in 28.5s')
+                    match = re.search(r"retry in (\d+(?:\.\d+)?)s", err_str) or re.search(r"'retryDelay':\s*'(\d+)s'", err_str)
+                    if match:
+                        wait_time = float(match.group(1)) + 1.0  # Đợi đúng số giây Google yêu cầu + 1s an toàn
+                    else:
+                        wait_time = 15.0
+
+                logger.error(f"[HTTP/API Error] Lần thử {attempt}/{self.max_retries} thất bại: {e}. Đang đợi {wait_time:.1f}s...")
                 time.sleep(wait_time)
         # Nếu thử hết số lần mà vẫn lỗi -> raise hoặc trả về fallback kèm log critical
         logger.critical(f"Tất cả {self.max_retries} lần gọi LLM đều thất bại! Lỗi cuối: {last_error}")

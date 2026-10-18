@@ -49,7 +49,7 @@ def interactive_chat():
     DEMO_QUERIES = {
         "1": "So sánh quy định về số tín chỉ đăng ký tối thiểu trong học kỳ chính để được xét học bổng giữa quy chế năm 2023 và quy chế sửa đổi năm 2024?",
         "2": "Sinh viên có điểm trung bình GPA 3.75 và Điểm rèn luyện 82 điểm trong học kỳ thì được xếp loại học bổng nào theo quy chế 2024? Hãy giải thích rõ nguyên tắc xếp loại.",
-        "3": "Hãy kiểm tra hồ sơ học tập của sinh viên Nguyễn Văn An (mã số SV2024001). Nếu đủ điều kiện loại Xuất sắc, hãy thực hiện nộp đơn đề cử học bổng và xác minh mã đơn trên hệ thống."
+        "3": "Hãy kiểm tra hồ sơ học tập của sinh viên Nguyễn Văn An (mã số 23110101). Nếu đủ điều kiện loại Xuất sắc, hãy thực hiện nộp đơn đề cử học bổng và xác minh mã đơn trên hệ thống."
     }
 
     streaming_enabled = True

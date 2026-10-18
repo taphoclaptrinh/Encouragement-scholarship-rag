@@ -7,5 +7,4 @@ venv/
 .vscode/
 .idea/
 .pytest_cache/
-logs/
 docs/

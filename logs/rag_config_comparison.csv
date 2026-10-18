@@ -1,0 +1,4 @@
+﻿config,hit_rate_pct,hits,total,avg_latency_ms
+Dense Vector Only,88.9,8,9,0.09
+BM25 Lexical Only,100.0,9,9,0.21
+Hybrid Search (RRF),100.0,9,9,0.25

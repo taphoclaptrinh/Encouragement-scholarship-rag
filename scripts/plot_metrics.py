@@ -1,12 +1,13 @@
 """
 TRỰC QUAN HÓA SỐ LIỆU ĐÁNH GIÁ (ĐIỂM CỘNG +1: ĐỒ THỊ + CSV LOG CHI TIẾT)
-Sử dụng OpenCV và NumPy có sẵn trong môi trường để sinh 2 đồ thị PNG chất lượng cao:
+Sử dụng OpenCV và NumPy để sinh 2 đồ thị PNG chất lượng cao tự động co dãn tỉ lệ:
 1. logs/tokens_by_question.png (Phân bổ Token USAGE theo câu hỏi)
 2. logs/latency_by_question.png (Độ trễ xử lý theo từng câu hỏi)
 """
 import os
 import sys
 import csv
+import math
 import cv2
 import numpy as np
 
@@ -39,31 +40,44 @@ def generate_charts():
     if n == 0:
         return
 
-    # ==========================================
-    # 1. ĐỒ THỊ TOKEN USAGE (BAR CHART)
-    # ==========================================
+    # Kích thước khung ảnh chuẩn
     w, h = 1000, 520
+    ox, oy = 80, 430
+
+    # ==========================================
+    # 1. ĐỒ THỊ TOKEN USAGE (BAR CHART CO DÃN ĐỘNG)
+    # ==========================================
     img_token = np.full((h, w, 3), 255, dtype=np.uint8)
 
-    # Title & Subtitle
+    # Tiêu đề
     cv2.putText(img_token, "BENCHMARK TOKEN USAGE PER QUESTION (TESTS/TESTSET.JSONL)", 
                 (50, 45), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 51, 102), 2, cv2.LINE_AA)
     cv2.putText(img_token, "Total tokens consumed by Agent per query (Input + Output tokens)", 
                 (50, 75), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (100, 100, 100), 1, cv2.LINE_AA)
 
-    # Axes
-    ox, oy = 80, 430
+    # Trục tọa độ
     cv2.line(img_token, (ox, oy), (950, oy), (180, 180, 180), 2)
     cv2.line(img_token, (ox, oy), (ox, 110), (180, 180, 180), 2)
 
-    # Gridlines and Y-axis marks (0, 500, 1000, 1500, 2000, 2500)
-    max_token_val = 2200
-    for y_val in [500, 1000, 1500, 2000]:
+    # Tính toán thang đo trục Y tự động cho Token
+    actual_max_token = max(tokens) if tokens else 10000
+    if actual_max_token <= 2500:
+        max_token_val = 2500
+        step_token = 500
+    elif actual_max_token <= 15000:
+        max_token_val = int(math.ceil(actual_max_token / 2500.0) * 2500)
+        step_token = 2500
+    else:
+        max_token_val = int(math.ceil(actual_max_token / 5000.0) * 5000)
+        step_token = 5000
+
+    for y_val in range(step_token, max_token_val + 1, step_token):
         y_pos = int(oy - (y_val / max_token_val) * (oy - 110))
         cv2.line(img_token, (ox, y_pos), (950, y_pos), (235, 235, 235), 1)
-        cv2.putText(img_token, str(y_val), (30, y_pos + 5), cv2.FONT_HERSHEY_SIMPLEX, 0.45, (120, 120, 120), 1, cv2.LINE_AA)
+        label_text = f"{y_val // 1000}k" if y_val >= 1000 else str(y_val)
+        cv2.putText(img_token, label_text, (35, y_pos + 5), cv2.FONT_HERSHEY_SIMPLEX, 0.45, (120, 120, 120), 1, cv2.LINE_AA)
 
-    # Bars
+    # Vẽ cột
     bar_width = 38
     spacing = 58
     color_map = {
@@ -81,7 +95,6 @@ def generate_charts():
         b_height = int((t_val / max_token_val) * (oy - 110))
         y = oy - b_height
 
-        # Category color
         cat = types[i]
         bar_color = color_map.get("no_answer")
         for k in color_map:
@@ -92,14 +105,10 @@ def generate_charts():
         cv2.rectangle(img_token, (x, y), (x + bar_width, oy), bar_color, -1)
         cv2.rectangle(img_token, (x, y), (x + bar_width, oy), (50, 50, 50), 1)
 
-        # Value text on top
         val_str = str(t_val)
-        cv2.putText(img_token, val_str, (x - 2, y - 8), cv2.FONT_HERSHEY_SIMPLEX, 0.38, (40, 40, 40), 1, cv2.LINE_AA)
-
-        # X label
+        cv2.putText(img_token, val_str, (x - 2, y - 8), cv2.FONT_HERSHEY_SIMPLEX, 0.35, (40, 40, 40), 1, cv2.LINE_AA)
         cv2.putText(img_token, q_ids[i], (x + 3, oy + 25), cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 51, 102), 1, cv2.LINE_AA)
 
-    # Legend at bottom
     cv2.putText(img_token, "Legend: [Blue] Grounding  [Orange] Multi-Doc  [Green] Reasoning  [Red] Action & Verify  [Purple] No-Answer",
                 (80, 495), cv2.FONT_HERSHEY_SIMPLEX, 0.45, (60, 60, 60), 1, cv2.LINE_AA)
 
@@ -108,26 +117,39 @@ def generate_charts():
     print(f"Đã tạo đồ thị Token Usage: {token_png}")
 
     # ==========================================
-    # 2. ĐỒ THỊ LATENCY (LINE CHART)
+    # 2. ĐỒ THỊ LATENCY (LINE CHART CO DÃN ĐỘNG)
     # ==========================================
     img_lat = np.full((h, w, 3), 255, dtype=np.uint8)
 
-    # Title & Subtitle
     cv2.putText(img_lat, "BENCHMARK PROCESSING LATENCY PER QUERY (SECONDS)", 
                 (50, 45), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 51, 102), 2, cv2.LINE_AA)
     cv2.putText(img_lat, "Execution time measured across ReAct Agent steps (End-to-End)", 
                 (50, 75), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (100, 100, 100), 1, cv2.LINE_AA)
 
-    # Axes
     cv2.line(img_lat, (ox, oy), (950, oy), (180, 180, 180), 2)
     cv2.line(img_lat, (ox, oy), (ox, 110), (180, 180, 180), 2)
 
-    # Gridlines and Y-axis marks (0.00s, 0.01s, 0.02s, 0.03s, 0.04s)
-    max_lat_val = 0.035
-    for l_val in [0.01, 0.02, 0.03]:
-        y_pos = int(oy - (l_val / max_lat_val) * (oy - 110))
+    # Tính toán thang đo trục Y tự động cho Latency
+    actual_max_lat = max(latencies) if latencies else 30.0
+    if actual_max_lat <= 0.05:
+        max_lat_val = 0.04
+        step_lat = 0.01
+        fmt = "{:.2f}s"
+    elif actual_max_lat <= 10.0:
+        max_lat_val = float(math.ceil(actual_max_lat / 2.0) * 2.0)
+        step_lat = 2.0
+        fmt = "{:.0f}s"
+    else:
+        max_lat_val = float(math.ceil(actual_max_lat / 5.0) * 5.0)
+        step_lat = 5.0
+        fmt = "{:.0f}s"
+
+    cur_val = step_lat
+    while cur_val <= max_lat_val + 0.001:
+        y_pos = int(oy - (cur_val / max_lat_val) * (oy - 110))
         cv2.line(img_lat, (ox, y_pos), (950, y_pos), (235, 235, 235), 1)
-        cv2.putText(img_lat, f"{l_val:.2f}s", (25, y_pos + 5), cv2.FONT_HERSHEY_SIMPLEX, 0.45, (120, 120, 120), 1, cv2.LINE_AA)
+        cv2.putText(img_lat, fmt.format(cur_val), (25, y_pos + 5), cv2.FONT_HERSHEY_SIMPLEX, 0.45, (120, 120, 120), 1, cv2.LINE_AA)
+        cur_val += step_lat
 
     pts = []
     for i in range(n):
@@ -136,20 +158,19 @@ def generate_charts():
         y = int(oy - (l_val / max_lat_val) * (oy - 110))
         pts.append((x, y))
 
-    # Draw lines
     for i in range(len(pts) - 1):
         cv2.line(img_lat, pts[i], pts[i+1], (40, 40, 214), 2, cv2.LINE_AA)
 
-    # Draw points and text
     for i, pt in enumerate(pts):
         cv2.circle(img_lat, pt, 5, (0, 51, 102), -1, cv2.LINE_AA)
         cv2.circle(img_lat, pt, 2, (255, 255, 255), -1, cv2.LINE_AA)
-        cv2.putText(img_lat, f"{latencies[i]:.2f}s", (pt[0] - 18, pt[1] - 10), 
+        cv2.putText(img_lat, f"{latencies[i]:.1f}s", (pt[0] - 16, pt[1] - 10), 
                     cv2.FONT_HERSHEY_SIMPLEX, 0.38, (40, 40, 40), 1, cv2.LINE_AA)
         cv2.putText(img_lat, q_ids[i], (pt[0] - 12, oy + 25), 
                     cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 51, 102), 1, cv2.LINE_AA)
 
-    cv2.putText(img_lat, "Average Latency: < 0.02s per query (Fast local retrieval and mock reasoning)",
+    avg_lat = sum(latencies) / len(latencies) if latencies else 0.0
+    cv2.putText(img_lat, f"Average Latency: {avg_lat:.2f}s per query (End-to-End ReAct Agent with Gemini API)",
                 (80, 495), cv2.FONT_HERSHEY_SIMPLEX, 0.45, (60, 60, 60), 1, cv2.LINE_AA)
 
     latency_png = os.path.join(output_dir, "latency_by_question.png")

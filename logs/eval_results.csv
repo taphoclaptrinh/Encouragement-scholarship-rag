@@ -1,0 +1,15 @@
+﻿id,type,tokens,steps,latency,calibration,grounding
+Q01,grounding,4947,2,3.27,PASS,PASS
+Q02,grounding,4884,2,2.3,PASS,PASS
+Q03,multi_doc_compare,8045,3,5.13,PASS,PASS
+Q04,reasoning_floor,5031,2,2.9,PASS,PASS
+Q05,reasoning_disqualify,4394,2,2.34,PASS,PASS
+Q06,reasoning_discipline,4420,2,2.81,PASS,PASS
+Q07,missing_data_refusal,6855,3,4.42,PASS,PASS
+Q08,action_and_verify,10746,5,61.09,PASS,PASS
+Q09,action_and_verify,16293,6,10.28,PASS,PASS
+Q10,no_answer,5231,2,2.81,PASS,PASS
+Q11,no_answer,5054,2,2.44,PASS,PASS
+Q12,no_answer,4865,2,2.14,PASS,PASS
+Q13,no_answer,5075,2,38.14,PASS,PASS
+Q14,no_answer,5298,2,2.47,PASS,PASS
